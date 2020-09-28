@@ -37,3 +37,34 @@ foreach ( $techmix_review_includes as $file ) {
 }
 
 remove_filter('get_the_excerpt', 'wp_trim_excerpt');
+
+// add_action( 'template_redirect', 'redirect_to_specific_page' );
+// function redirect_to_specific_page() {
+// 	// if ( is_page('account') && ! is_user_logged_in() ) {
+// 	// 	auth_redirect();
+// 	// }
+
+// 	// if (! is_user_logged_in()) {
+// 	// 	if (is_page('account')) {
+// 	// 		wp_redirect( home_url(  ).'/login',301 );
+// 	// 		exit;
+// 	// 	}
+// 	// }
+// }
+
+function tm_my_login_redirect( $redirect_to, $request, $user ) {
+    //is there a user to check?
+    if ( isset( $user->roles ) && is_array( $user->roles ) ) {
+        //check for admins
+        if ( in_array( 'administrator', $user->roles ) ) {
+            // redirect them to the default place
+            return $redirect_to;
+        } else {
+            return home_url() . '/account';
+        }
+    } else {
+        return $redirect_to;
+    }
+}
+ 
+add_filter( 'login_redirect', 'tm_my_login_redirect', 10, 3 );
