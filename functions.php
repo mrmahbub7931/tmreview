@@ -13,6 +13,8 @@ $techmix_review_includes = array(
 	'/setup.php',                           // Theme setup and custom theme supports.
 	'/widgets.php',                         // Register widget area.
 	'/custom-user-insert.php',				// Custom user insert.
+	'/custom-menu-db.php',					// Custom user insert.
+	'/tm-admin-ajax.php',					// Custom user insert.
 	'/enqueue.php',                         // Enqueue scripts and styles.
 	'/include.php',                         // Include php file.
 	'/template-tags.php',                   // Custom template tags for this theme.

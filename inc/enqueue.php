@@ -54,8 +54,15 @@ if ( ! function_exists( 'tm_newspaper_scripts' ) ) {
 } // endif function_exists( 'tm_newspaper_scripts' ).
 function tm_newspaper_admin_scripts()
 {
+	// wp_enqueue_style( 'bs-style', get_template_directory_uri() . '/assets/css/bootstrap.min.css', array(), uniqid() );
 	wp_enqueue_style( 'theme-admin-style', get_template_directory_uri() . '/assets/css/admin.css', array(), uniqid() );
+
+	// wp_enqueue_script( 'bs-scripts', get_template_directory_uri() . '/assets/js/bootstrap.min.js', array(), uniqid(), true );
 	wp_enqueue_script( 'theme-admin-scripts', get_template_directory_uri() . '/assets/js/admin.js', array(), uniqid(), true );
+	if ( ! did_action( 'wp_enqueue_media' ) ) {
+		wp_enqueue_media();
+	}
+	wp_enqueue_script( 'theme-admin-jq', get_template_directory_uri() . '/assets/js/admin-jq.js', array(), uniqid(), true );
 }
 add_action( 'wp_enqueue_scripts', 'tm_newspaper_scripts' );
 add_action( 'admin_enqueue_scripts', 'tm_newspaper_admin_scripts' );

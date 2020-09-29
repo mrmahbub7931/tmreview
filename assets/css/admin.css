@@ -46,3 +46,23 @@
 	background-color: #fff;
 	box-shadow: 0 5px 4px -2px rgba(0, 0, 0, 0.15);
 }
+
+form#add-brand-form div.initialInput {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+form#add-brand-form div.initialInput input {
+    flex-basis: 90%;
+}
+form#add-brand-form div.form-group, form#add-brand-form div.form-group .initialInput {
+    margin: 0px 0 10px;
+}
+
+form#add-brand-form div.form-group textarea {
+    width: 100%;
+    height: 80px;
+    resize: none;
+}

@@ -21,6 +21,7 @@ if (! is_user_logged_in()) {
 get_header();
 
 $container = get_theme_mod( 'techmix_review_container_type' );
+$current_user = wp_get_current_user();
 
 ?>
 
@@ -67,7 +68,7 @@ $container = get_theme_mod( 'techmix_review_container_type' );
                 <hr>
                 <div class="form-group">
                     <label for="fname">name</label><br>
-                    <input type="text" id="fname" name="fname">
+                    <input type="text" id="fname" name="fname" value="<?php echo $current_user->display_name?>">
                 </div>
                 <div class="form-group">
                     <label for="birthday">your date of Birth</label><br>
@@ -112,7 +113,7 @@ $container = get_theme_mod( 'techmix_review_container_type' );
                 <hr>
                 <div class="form-group">
                     <label for="fname">your current password</label><br>
-                    <input type="password" value="23hjy679" name="">
+                    <input type="text" value="<?php echo $current_user->password?>" name="">
                 </div>
 
 
