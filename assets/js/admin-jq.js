@@ -18,7 +18,7 @@ jQuery(function($){
 			multiple: false
 		}).on('select', function() { // it also has "open" and "close" events
 			var attachment = custom_uploader.state().get('selection').first().toJSON();
-			button.html('<img id="brand_logo" src="' + attachment.url + '">').next().val(attachment.id).next().show();
+			button.html('<img id="store_logo" src="' + attachment.url + '" alt="">').next().val(attachment.id).next().show();
 		}).open();
  
 	});
@@ -30,15 +30,17 @@ jQuery(function($){
  
 		var button = $(this);
 		button.next().val(''); // emptying the hidden field
-		button.hide().prev().html('Upload image');
+		console.log(button.prev().html('Upload image'));
+		// button.hide().prev().html('Upload image');
     });
     
     // add row
-    $("#addSocialBox").click(function () {
+    $("#addDescBox").click(function () {
         var html = '';
         html += '<div class="initialInput">';
-        html += '<input type="text" name="social_link[]" class="social_link widefat">';
-        html += '<button type="button" id="removeRow" class="button button-primary"><i class="dashicons dashicons-trash"></i></button>';
+        html += '<input type="text" name="number_text[]" class="social_link widefat" placeholder="Number Description">';
+        html += '<input type="text" name="description[]" class="social_link widefat" placeholder="Text Description">';
+        html += '<button type="button" id="removeRow" class="button button-secondary"><i class="dashicons dashicons-trash"></i></button>';
         html += '</div>';
 
         $('#newRow').append(html);

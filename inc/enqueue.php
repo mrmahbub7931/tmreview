@@ -45,7 +45,7 @@ if ( ! function_exists( 'tm_newspaper_scripts' ) ) {
 		wp_enqueue_script( 'theme-slick', get_template_directory_uri() . '/assets/js/slick.min.js', array(), uniqid(), true );
 
 		wp_enqueue_script( 'theme-scripts', get_template_directory_uri() . '/assets/js/app.js', array(), uniqid(), true );
-		wp_enqueue_script( 'theme-user', get_template_directory_uri() . '/assets/js/user-create.js', array(), uniqid(), true );
+		wp_enqueue_script( 'theme-user', get_template_directory_uri() . '/assets/js/tm-ajax.js', array(), uniqid(), true );
 
 		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			wp_enqueue_script( 'comment-reply' );

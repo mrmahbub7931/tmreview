@@ -1635,6 +1635,10 @@ margin-right: 20px;
 .single-brand-header .brand-details .brand-details-left .brand_social_account ul > li > a > i.fa-instagram {
     background: #e4405f;
 }
+.single-brand-header .brand-details .brand-details-left .brand_social_account ul > li > a > i.fa-linkedin {
+    background: #0077B5;
+}
+
 .single-brand-header .brand-details .brand-details-right a.social_share_btn i {
     display: block;
     width: 2rem;

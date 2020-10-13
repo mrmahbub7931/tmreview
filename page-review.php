@@ -16,7 +16,13 @@ defined( 'ABSPATH' ) || exit;
 get_header();
 
 $container = get_theme_mod( 'techmix_review_container_type' );
-
+global $wpdb;
+    $table = $wpdb->prefix.'product'; 
+        if (isset($_REQUEST['p_id'])) : 
+            $productID = sanitize_key( $_GET['p_id'] );
+            $sql = "SELECT * FROM $table WHERE id=$productID";
+                    $single_form = $wpdb->get_results($sql) or die("data not found");
+                    if (count($single_form) > 0) :
 ?>
 
 <div class="wrapper reivew" id="page-wrapper">
@@ -27,10 +33,10 @@ $container = get_theme_mod( 'techmix_review_container_type' );
                 <div class="col-12 col-lg-6 offset-lg-3">
                     <div class="single-product-header-inner">
                         <div class="thumb">
-                            <img src="http://lorempixel.com/80/80/" alt="">
+                            <img src="<?php echo esc_url( $single_form[0]->product_logo )?>" alt="">
                         </div>
                         <div class="s-product-title">
-                            <h3 class="font-p">Jordana sweet Cream Matte Liquid Lip Color - 07 Tiramisu</h3>
+                            <h3 class="font-p"><?php echo $single_form[0]->name?></h3>
                         </div>
                     </div>
                 </div>
@@ -48,11 +54,11 @@ $container = get_theme_mod( 'techmix_review_container_type' );
                             <div class="form-group">
                                 <label for="star-rating">Rate your recent experience</label>
                                 <ul>
-                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                    <li class="single-star-0"><a href="#"><i class="ion-android-star" data-index="1"></i></a></li>
+                                    <li class="single-star-1"><a href="#"><i class="ion-android-star" data-index="2"></i></a></li>
+                                    <li class="single-star-2"><a href="#"><i class="ion-android-star" data-index="3"></i></a></li>
+                                    <li class="single-star-3"><a href="#"><i class="ion-android-star" data-index="4"></i></a></li>
+                                    <li class="single-star-4"><a href="#"><i class="ion-android-star" data-index="5"></i></a></li>
                                 </ul>
                             </div>
                             <div class="form-group">
@@ -72,7 +78,7 @@ $container = get_theme_mod( 'techmix_review_container_type' );
                                 <input type="checkbox" required id="privacy_policy" name="privacy_policy">
                                 <label for="privacy_policy">I accept the <a href="#">Terms & Conditions</a> and  <a href="#">Privacy Policy</a> </label>
                             </div>
-                            <input type="submit" id="review_submit" name="review_submit" value="Submit Review">
+                            <input type="submit" id="p_review_submit" name="review_submit" value="Submit Review">
                         </div>
                     </form>
                     
@@ -83,4 +89,4 @@ $container = get_theme_mod( 'techmix_review_container_type' );
 
 </div><!-- #page-wrapper -->
 
-<?php get_footer(); ?>
+<?php endif; endif; get_footer(); ?>
