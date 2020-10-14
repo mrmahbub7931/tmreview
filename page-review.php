@@ -54,11 +54,11 @@ global $wpdb;
                             <div class="form-group">
                                 <label for="star-rating">Rate your recent experience</label>
                                 <ul>
-                                    <li class="single-star-0"><a href="#"><i class="ion-android-star" data-index="1"></i></a></li>
-                                    <li class="single-star-1"><a href="#"><i class="ion-android-star" data-index="2"></i></a></li>
-                                    <li class="single-star-2"><a href="#"><i class="ion-android-star" data-index="3"></i></a></li>
-                                    <li class="single-star-3"><a href="#"><i class="ion-android-star" data-index="4"></i></a></li>
-                                    <li class="single-star-4"><a href="#"><i class="ion-android-star" data-index="5"></i></a></li>
+                                    <li class="single-star-0"><a href="javascript:void(0)"><i class="ion-android-star" data-index="1"></i></a></li>
+                                    <li class="single-star-1"><a href="javascript:void(0)"><i class="ion-android-star" data-index="2"></i></a></li>
+                                    <li class="single-star-2"><a href="javascript:void(0)"><i class="ion-android-star" data-index="3"></i></a></li>
+                                    <li class="single-star-3"><a href="javascript:void(0)"><i class="ion-android-star" data-index="4"></i></a></li>
+                                    <li class="single-star-4"><a href="javascript:void(0)"><i class="ion-android-star" data-index="5"></i></a></li>
                                 </ul>
                             </div>
                             <div class="form-group">

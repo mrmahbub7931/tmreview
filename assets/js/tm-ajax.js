@@ -51,69 +51,30 @@ var productReviewCreate = (function ($) {
         productReviewCreatefn: function () {
             $(document).ready(function () {
                 var color = ['#FF381C','#e6672b','#ffc31c','#73cf11','#00b67a'];
-                for (var i = 0; i < 5; i++) {
-                    $('.review-form-top li.single-star-'+i+' .ion-android-star').mouseover(function() {
-                        $(this).css({'background-color': color[i]});
-                    })
-                };
-                // $('.review-form-top li:nth-child(2) .ion-android-star').mouseover(function () {
-                //     $(this).css({'background-color': "#e6672b"});
+               
+                $('.review-form-top li .ion-android-star').mouseover(function() {
+                    var star_index  = parseInt($(this).data('index'));
+                    for (var i = 0; i < star_index; i++) {
+                        $('.review-form-top li.single-star-'+i+' .ion-android-star').css({'background-color': color[i]});
+                    }
+                    
+                });
 
-                // });
+                $('.review-form-top li .ion-android-star').mouseleave(function() {
+                    resetColor();
+                    $('.review-form-top li.single-star-0 .ion-android-star').css({'background-color': '#FF381C'});
+                });
                 
-                // $('.review-form-top li:nth-child(2) .ion-android-star').mouseleave(function () {
-                //     $(this).css({'background-color': "#DCDAE5"});
-                   
-                // });
-                
-                // $('.review-form-top li:nth-child(3) .ion-android-star').mouseover(function () {
-                //     $(this).css({'background-color': "#ffc31c"});
-                //     $('.review-form-top li:nth-child(2) .ion-android-star').css({'background-color': "#e6672b"});
-                // });
-                
-                // $('.review-form-top li:nth-child(3) .ion-android-star').mouseleave(function () {
-                //     $(this).css({'background-color': "#DCDAE5"});
-                //     $('.review-form-top li:nth-child(2) .ion-android-star').css({'background-color': "#DCDAE5"});
-                // });
-                // $('.review-form-top li:nth-child(4) .ion-android-star').mouseover(function () {
-                //     $(this).css({'background-color': "#73cf11"});
-                //     $('.review-form-top li:nth-child(2) .ion-android-star').css({'background-color': "#e6672b"});
-                //     $('.review-form-top li:nth-child(3) .ion-android-star').css({'background-color': "#ffc31c"});
-                // });
-                
-                // $('.review-form-top li:nth-child(4) .ion-android-star').mouseleave(function () {
-                //     $(this).css({'background-color': "#DCDAE5"});
-                //     $('.review-form-top li:nth-child(2) .ion-android-star').css({'background-color': "#DCDAE5"});
-                //     $('.review-form-top li:nth-child(3) .ion-android-star').css({'background-color': "#DCDAE5"});
-                // });
-                // $('.review-form-top li:nth-child(5) .ion-android-star').mouseover(function () {
-                //     $(this).css({'background-color': "#00b67a"});
-                //     $('.review-form-top li:nth-child(2) .ion-android-star').css({'background-color': "#e6672b"});
-                //     $('.review-form-top li:nth-child(3) .ion-android-star').css({'background-color': "#ffc31c"});
-                //     $('.review-form-top li:nth-child(4) .ion-android-star').css({'background-color': "#73cf11"});
-                // });
-                
-                // $('.review-form-top li:nth-child(5) .ion-android-star').mouseleave(function () {
-                //     $(this).css({'background-color': "#DCDAE5"});
-                //     $('.review-form-top li:nth-child(2) .ion-android-star').css({'background-color': "#DCDAE5"});
-                //     $('.review-form-top li:nth-child(3) .ion-android-star').css({'background-color': "#DCDAE5"});
-                //     $('.review-form-top li:nth-child(4) .ion-android-star').css({'background-color': "#DCDAE5"});
-                // });
 
                 var ratedIndex = -1;
 
-                $('.review-form-top li .ion-android-star').mouseover(function (params) {
-                    var currentIndex  = parseInt($(this).data('index'));
-                });
-
                 $('.review-form-top li .ion-android-star').on("click",function () {
-                    ratedIndex = parseInt($(this).data("index"));
                     resetColor();
+                    ratedIndex = parseInt($(this).data("index"));
                 });
 
                 $('.review-form-top li .ion-android-star').mouseleave(function () {
                     if (ratedIndex != -1) {
-                        // var color = ['#FF381C','#e6672b','#ffc31c','#73cf11','#00b67a'];
                             for (var i = 0; i < ratedIndex; i++) {
                                 $('.review-form-top li.single-star-'+i+' .ion-android-star').css({'background-color':color[i]});
                             };
@@ -125,7 +86,7 @@ var productReviewCreate = (function ($) {
                 }
                 $("#p_review_submit").on("click",function (e) {
                     e.preventDefault();
-
+                    
                 });
             });
         },
