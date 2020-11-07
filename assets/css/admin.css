@@ -73,3 +73,6 @@ form#add-brand-form div.form-group textarea {
 #wpbody-content p.search-box{
 	margin: 6px 0 4px;
 }
+#wpfooter {
+    display: none;
+}

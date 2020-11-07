@@ -136,10 +136,10 @@
                     <a href="<?php echo home_url( '/'.$data->slug.'?store_id='.$data->id ) ?>" class="button button-secondary">View Page</a>
                 </td>
             </tr>
-             <?php endforeach; }?>
+            <?php endforeach; }?>
         </tbody>
     </table>
-                <?php endif; ?>
+    <?php endif; ?>
 </div>
 
 <script type="text/javascript">

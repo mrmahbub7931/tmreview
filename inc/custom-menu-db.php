@@ -64,6 +64,22 @@ if ( ! function_exists( 'techmix_review_cs_menu' ) ) {
             'add-product',
             'add_product_custom_page'
         );
+        add_submenu_page( 
+            'product',
+            'Categories',
+            'Categories',
+            'manage_options',
+            'add-category',
+            'add_category_custom_page'
+        );
+        add_submenu_page( 
+            'product',
+            'Brands',
+            'Brands',
+            'manage_options',
+            'brand',
+            'brand_custom_page'
+        );
 
     }
 }
@@ -84,6 +100,15 @@ function add_product_custom_page()
 {
     include(get_stylesheet_directory().'/page-templates/add-product.php');
 }
+function add_category_custom_page()
+{
+    include(get_stylesheet_directory().'/page-templates/category.php');
+}
+function brand_custom_page()
+{
+    include(get_stylesheet_directory().'/page-templates/brands.php');
+}
+
 if (!function_exists('tm_review_store_db')) {
     add_action( 'after_setup_theme', 'tm_review_store_db' );
     function tm_review_store_db() {
@@ -105,6 +130,28 @@ if (!function_exists('tm_review_store_db')) {
             website_url varchar(50) NULL,
             affiliate_url varchar(50) NULL,
             store_logo varchar(255) NULL,
+            UNIQUE KEY id (id)
+        ) $charset_collate;";
+    
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+    }
+}
+if (!function_exists('tm_review_brand_db')) {
+    add_action( 'after_setup_theme', 'tm_review_brand_db' );
+    function tm_review_brand_db() {
+
+        global $wpdb;
+        $charset_collate = $wpdb->get_charset_collate();
+        $table_name = $wpdb->prefix . 'brand';
+    
+        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+            id mediumint(11) NOT NULL AUTO_INCREMENT,
+            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
+            name varchar(255) NOT NULL,
+            slug varchar(255) NOT NULL,
+            description varchar(255) NULL,
+            brand_logo varchar(255) NULL,
             UNIQUE KEY id (id)
         ) $charset_collate;";
     
@@ -154,6 +201,28 @@ if (!function_exists('tm_review_product_review_db')) {
             star varchar(50) NOT NULL,
             user_id varchar(50) NOT NULL,
             product_id varchar(255) NOT NULL,
+            UNIQUE KEY id (id)
+        ) $charset_collate;";
+    
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+    }
+}
+
+if (!function_exists('tm_review_product_category_db')) {
+    add_action( 'after_setup_theme', 'tm_review_product_category_db' );
+    function tm_review_product_category_db() {
+
+        global $wpdb;
+        $charset_collate = $wpdb->get_charset_collate();
+        $table_name = $wpdb->prefix . 'categories';
+    
+        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+            id mediumint(11) NOT NULL AUTO_INCREMENT,
+            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
+            name varchar(255) NOT NULL,
+            slug varchar(255) NOT NULL,
+            parent int(10) DEFAULT 0,
             UNIQUE KEY id (id)
         ) $charset_collate;";
     

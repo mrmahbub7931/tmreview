@@ -570,14 +570,24 @@
             </div>
         </div>
         <!-- end row -->
+        <?php
+        global $wpdb;
+        $table = $wpdb->prefix.'product';
+            $sql = "SELECT * FROM $table";
+            $products = $wpdb->get_results($sql) or "data not found";
+            // echo "<pre>";
+            // print_r();
+            if(count($products) > 0) : 
+            ?>
         <div class="row">
+        <?php foreach ($products as $product) :?>
             <div class="col-12 col-md-3 mb-4">
                 <div class="single-product">
                     <div class="product-thumb">
-                        <img src="<?php echo get_template_directory_uri()?>/assets/img/product.jpg" alt="">
+                        <a href="<?php echo home_url( '/'.$product->slug.'?product_id='.$product->id ) ?>"><img src="<?php echo $product->product_logo ?>" alt=""></a>
                     </div>
                     <div class="product-short-desc">
-                        <h3 class="product-title"><a href="#">OGX Renewing Moroccan Argan Oil Shampoo – 385ml</a></h3>
+                        <h3 class="product-title"><a href="<?php echo home_url( '/'.$product->slug.'?product_id='.$product->id ) ?>"><?php echo wp_trim_words( $product->name, 10, '[...]' )?></a></h3>
                         
                     </div>
                     <div class="review">
@@ -592,214 +602,17 @@
                     <div class="add-to-cart-wrapper">
                         <div class="add-to-cart">
                             <span class="wishlist"><a href="#"><i class="far fa-heart"></i></a></span>
-                            <a href="#" class="add-to-cart-btn">View Review</a>
+                            <a href="<?php echo home_url( '/'.$product->slug.'?product_id='.$product->id ) ?>" class="add-to-cart-btn">View Review</a>
                         </div>
                     </div>
                 </div>
                 
             </div>
-            
-            <div class="col-12 col-md-3 mb-4">
-                <div class="single-product">
-                    <div class="product-thumb">
-                        <img src="<?php echo get_template_directory_uri()?>/assets/img/product.jpg" alt="">
-                        
-                    </div>
-                    <div class="product-short-desc">
-                        <h3 class="product-title"><a href="#">OGX Renewing Moroccan Argan Oil Shampoo – 385ml</a></h3>
-                        
-                    </div>
-                    <div class="review">
-                        <ul>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                        </ul>
-                    </div>
-                    <div class="add-to-cart-wrapper">
-                        <div class="add-to-cart">
-                            <span class="wishlist"><a href="#"><i class="far fa-heart"></i></a></span>
-                            <a href="#" class="add-to-cart-btn">View Review</a>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-            <div class="col-12 col-md-3 mb-4">
-                <div class="single-product">
-                    <div class="product-thumb">
-                        <img src="<?php echo get_template_directory_uri()?>/assets/img/product.jpg" alt="">
-                        
-                    </div>
-                    <div class="product-short-desc">
-                        <h3 class="product-title"><a href="#">OGX Renewing Moroccan Argan Oil Shampoo – 385ml</a></h3>
-                        
-                    </div>
-                    <div class="review">
-                        <ul>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                        </ul>
-                    </div>
-                    <div class="add-to-cart-wrapper">
-                        <div class="add-to-cart">
-                            <span class="wishlist"><a href="#"><i class="far fa-heart"></i></a></span>
-                            <a href="#" class="add-to-cart-btn">View Review</a>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-            <div class="col-12 col-md-3 mb-4">
-                <div class="single-product">
-                    <div class="product-thumb">
-                        <img src="<?php echo get_template_directory_uri()?>/assets/img/product.jpg" alt="">
-                        
-                    </div>
-                    <div class="product-short-desc">
-                        <h3 class="product-title"><a href="#">OGX Renewing Moroccan Argan Oil Shampoo – 385ml</a></h3>
-                        
-                    </div>
-                    <div class="review">
-                        <ul>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                        </ul>
-                    </div>
-                    <div class="add-to-cart-wrapper">
-                        <div class="add-to-cart">
-                            <span class="wishlist"><a href="#"><i class="far fa-heart"></i></a></span>
-                            <a href="#" class="add-to-cart-btn">View Review</a>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <div class="col-12 col-md-3 mb-4">
-                <div class="single-product">
-                    <div class="product-thumb">
-                        <img src="<?php echo get_template_directory_uri()?>/assets/img/product.jpg" alt="">
-                        
-                    </div>
-                    <div class="product-short-desc">
-                        <h3 class="product-title"><a href="#">OGX Renewing Moroccan Argan Oil Shampoo – 385ml</a></h3>
-                        
-                    </div>
-                    <div class="review">
-                        <ul>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                        </ul>
-                    </div>
-                    <div class="add-to-cart-wrapper">
-                        <div class="add-to-cart">
-                            <span class="wishlist"><a href="#"><i class="far fa-heart"></i></a></span>
-                            <a href="#" class="add-to-cart-btn">View Review</a>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-            <div class="col-12 col-md-3 mb-4">
-                <div class="single-product">
-                    <div class="product-thumb">
-                        <img src="<?php echo get_template_directory_uri()?>/assets/img/product.jpg" alt="">
-                        
-                    </div>
-                    <div class="product-short-desc">
-                        <h3 class="product-title"><a href="#">OGX Renewing Moroccan Argan Oil Shampoo – 385ml</a></h3>
-                        
-                    </div>
-                    <div class="review">
-                        <ul>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                        </ul>
-                    </div>
-                    <div class="add-to-cart-wrapper">
-                        <div class="add-to-cart">
-                            <span class="wishlist"><a href="#"><i class="far fa-heart"></i></a></span>
-                            <a href="#" class="add-to-cart-btn">View Review</a>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-            <div class="col-12 col-md-3 mb-4">
-                <div class="single-product">
-                    <div class="product-thumb">
-                        <img src="<?php echo get_template_directory_uri()?>/assets/img/product.jpg" alt="">
-                        
-                    </div>
-                    <div class="product-short-desc">
-                        <h3 class="product-title"><a href="#">OGX Renewing Moroccan Argan Oil Shampoo – 385ml</a></h3>
-                        
-                    </div>
-                    <div class="review">
-                        <ul>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                        </ul>
-                    </div>
-                    <div class="add-to-cart-wrapper">
-                        <div class="add-to-cart">
-                            <span class="wishlist"><a href="#"><i class="far fa-heart"></i></a></span>
-                            <a href="#" class="add-to-cart-btn">View Review</a>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-            <div class="col-12 col-md-3 mb-4">
-                <div class="single-product">
-                    <div class="product-thumb">
-                        <img src="<?php echo get_template_directory_uri()?>/assets/img/product.jpg" alt="">
-                        
-                    </div>
-                    <div class="product-short-desc">
-                        <h3 class="product-title"><a href="#">OGX Renewing Moroccan Argan Oil Shampoo – 385ml</a></h3>
-                        
-                    </div>
-                    <div class="review">
-                        <ul>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                            <li><i class="fas fa-star"></i></li>
-                        </ul>
-                    </div>
-                    <div class="add-to-cart-wrapper">
-                        <div class="add-to-cart">
-                            <span class="wishlist"><a href="#"><i class="far fa-heart"></i></a></span>
-                            <a href="#" class="add-to-cart-btn">View Review</a>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
+        <?php endforeach; ?>
 
         </div>
         <!-- row -->
-
+        <?php endif; ?>
     </div>
 
 </section>

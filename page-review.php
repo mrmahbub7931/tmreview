@@ -49,8 +49,18 @@ global $wpdb;
         <div class="row">
             <div class="col-12 col-lg-6 offset-lg-3">
                 <div class="review-message-box-wrap">
-                    <form action="" method="post" id="review-message-form">
+                    <form action="" method="post" id="review-message-form" data-url="<?php echo admin_url('admin-ajax.php'); ?>">
                         <div class="review-form-top">
+                            <?php wp_nonce_field('tm_add_review', 'tm_add_product_review_security'); ?>
+                            <?php 
+                                $user = wp_get_current_user();
+                            ?>
+                            <input type="hidden" name="user_id" id="user_id" value="<?php echo $user->ID; ?>">
+
+                            <input type="hidden" name="product_id" id="product_id" value="<?php echo $single_form[0]->id;?>">
+                            <input type="hidden" name="product_slug" id="product_slug" value="<?php echo $single_form[0]->slug;?>">
+
+                            <input type="hidden" name="site_url" id="site_url" value="<?php echo site_url('/')?>">
                             <div class="form-group">
                                 <label for="star-rating">Rate your recent experience</label>
                                 <ul>
@@ -80,6 +90,7 @@ global $wpdb;
                             </div>
                             <input type="submit" id="p_review_submit" name="review_submit" value="Submit Review">
                         </div>
+                        <span class="message"></span>
                     </form>
                     
                 </div> <!-- end review message box wrap -->

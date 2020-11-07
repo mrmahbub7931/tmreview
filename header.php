@@ -61,8 +61,12 @@ $container = get_theme_mod( 'techmix_review_container_type' );
 									</div>
 								</form>
 							</li>
-							<li><a href="#">লগইন</a></li>
-							<li><a href="#">রেজিস্ট্রেশন</a></li>
+							<?php if (is_user_logged_in()) :?>
+								<li><a href="<?php echo wp_logout_url(home_url()); ?>">Logout</a></li>
+							<?php else :?>
+							<li><a href="<?php echo site_url( '/' )?>login">Login</a></li>
+							<li><a href="<?php echo site_url( '/' )?>register">Register</a></li>
+							<?php endif; ?>
 						</ul>
 					</div>
 				</div>

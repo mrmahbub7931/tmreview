@@ -32,6 +32,7 @@ $container = get_theme_mod( 'techmix_review_container_type' );
                 
                 <form id="tm_user_insert" action="#" method="post" data-url="<?php echo admin_url('admin-ajax.php'); ?>">
                     <?php wp_nonce_field('tm_user_registration980', 'user_regi_security'); ?>
+                    <input type="hidden" name="site_url" id="site_url" value="<?php echo site_url('/')?>">
                     <div class="form-group">
                         <label for="name"><b>name</b></label>
                         <input type="text" placeholder="Full Name" name="name" id="name">

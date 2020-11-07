@@ -162,12 +162,11 @@ header.tmxr_header_area {
 }
 
 .tmxr_inner_header.tmxr_flex .logo-area {
-    flex-basis: 20%;
+    flex-basis: 16%;
     padding-right: 20px;
 }
-
 .tmxr_inner_header.tmxr_flex .menu-area {
-    flex-basis: 42%;
+    flex-basis: 46%;
 }
 .tmxr_inner_header.tmxr_flex .search-login-control {
     flex-basis: 38%;
@@ -430,6 +429,19 @@ section.tmxr_top_products .single-product:hover .add-to-cart {
 section.tmxr_top_products .single-product .product-thumb {
     position: relative;
     overflow: hidden;
+    width: 100%;
+    height: 250px;
+}
+section.tmxr_top_products .single-product .product-thumb > a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+section.tmxr_top_products .single-product .product-thumb > a > img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
 }
 
 section.tmxr_top_products .single-product .add-to-cart span.wishlist {
@@ -782,6 +794,21 @@ div#wrapper-footer-full .footer-widget ul li {
     margin: 0 1px;
     border-radius: 2px;
     font-size: 18px;
+}
+.single-product-after-desc .review-box .review-part .review-part-top .review-part-top-left > ul.user-review-icon > li.single-star-4 > a{
+    background: rgb(115, 207, 17);
+}
+.single-product-after-desc .review-box .review-part .review-part-top .review-part-top-left > ul.user-review-icon > li.single-star > a{
+    background: rgb(220, 218, 229);
+}
+.single-product-after-desc .review-box .review-part .review-part-top .review-part-top-left > ul.user-review-icon > li.single-star-3 > a{
+    background: rgb(255, 195, 28);
+}
+.single-product-after-desc .review-box .review-part .review-part-top .review-part-top-left > ul.user-review-icon > li.single-star-2 > a{
+    background: rgb(230, 103, 43);
+}
+.single-product-after-desc .review-box .review-part .review-part-top .review-part-top-left > ul.user-review-icon > li.single-star-1 > a{
+    background: rgb(255, 56, 28);
 }
 .single-product-after-desc .review-box .review-part .review-part-top .review-part-top-left > ul.user-review-icon + span {
     color: #c1c1c1;
