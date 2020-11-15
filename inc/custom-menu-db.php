@@ -30,6 +30,15 @@ if ( ! function_exists( 'techmix_review_cs_menu' ) ) {
             '',
             7
         );
+        add_menu_page( 
+            __( 'Reviews', 'textdomain' ),
+            'Review',
+            'manage_options',
+            'review',
+            'review_custom_page',
+            '',
+            8
+        );
 
         add_submenu_page( 
             'store',
@@ -108,6 +117,11 @@ function brand_custom_page()
 {
     include(get_stylesheet_directory().'/page-templates/brands.php');
 }
+function review_custom_page()
+{
+    include(get_stylesheet_directory().'/page-templates/review.php');
+}
+
 
 if (!function_exists('tm_review_store_db')) {
     add_action( 'after_setup_theme', 'tm_review_store_db' );
@@ -119,7 +133,6 @@ if (!function_exists('tm_review_store_db')) {
     
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
             id mediumint(11) NOT NULL AUTO_INCREMENT,
-            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
             name varchar(255) NOT NULL,
             slug varchar(255) NOT NULL,
             description varchar(255) NULL,
@@ -130,6 +143,7 @@ if (!function_exists('tm_review_store_db')) {
             website_url varchar(50) NULL,
             affiliate_url varchar(50) NULL,
             store_logo varchar(255) NULL,
+            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
             UNIQUE KEY id (id)
         ) $charset_collate;";
     
@@ -147,11 +161,11 @@ if (!function_exists('tm_review_brand_db')) {
     
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
             id mediumint(11) NOT NULL AUTO_INCREMENT,
-            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
-            name varchar(255) NOT NULL,
-            slug varchar(255) NOT NULL,
+            brand_name varchar(255) NOT NULL,
+            brand_slug varchar(255) NOT NULL,
             description varchar(255) NULL,
             brand_logo varchar(255) NULL,
+            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
             UNIQUE KEY id (id)
         ) $charset_collate;";
     
@@ -167,16 +181,22 @@ if (!function_exists('tm_review_product_db')) {
         global $wpdb;
         $charset_collate = $wpdb->get_charset_collate();
         $table_name = $wpdb->prefix . 'product';
+        $category_table = $wpdb->prefix . 'categories';
+        $brand_table = $wpdb->prefix . 'brand';
     
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
             id mediumint(11) NOT NULL AUTO_INCREMENT,
-            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
             name varchar(255) NOT NULL,
             slug varchar(255) NOT NULL,
             description varchar(255) NULL,
             number_text varchar(50) NULL,
             check_price varchar(50) NULL,
+            category_id mediumint(11) NULL,
+            brand_id mediumint(11) NULL,
             product_logo varchar(255) NULL,
+            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
+            FOREIGN KEY (category_id) REFERENCES $category_table(id),
+            FOREIGN KEY (brand_id) REFERENCES $brand_table(id),
             UNIQUE KEY id (id)
         ) $charset_collate;";
     
@@ -192,15 +212,24 @@ if (!function_exists('tm_review_product_review_db')) {
         global $wpdb;
         $charset_collate = $wpdb->get_charset_collate();
         $table_name = $wpdb->prefix . 'product_review';
+        $product_table = $wpdb->prefix . 'product';
+        $user_table = $wpdb->prefix . 'users';
     
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
             id mediumint(11) NOT NULL AUTO_INCREMENT,
-            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
             title varchar(255) NOT NULL,
             body varchar(255) NOT NULL,
             star varchar(50) NOT NULL,
-            user_id varchar(50) NOT NULL,
-            product_id varchar(255) NOT NULL,
+            age_group varchar(100) NULL,
+            skin_type varchar(100) NULL,
+            hair_type varchar(100) NULL,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            product_id mediumint(11) NOT NULL,
+            status mediumint(11) NULL,
+            verify mediumint(11) NULL,
+            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
+            FOREIGN KEY (user_id) REFERENCES $user_table(id),
+            FOREIGN KEY (product_id) REFERENCES $product_table(id),
             UNIQUE KEY id (id)
         ) $charset_collate;";
     
@@ -219,10 +248,10 @@ if (!function_exists('tm_review_product_category_db')) {
     
         $sql = "CREATE TABLE IF NOT EXISTS $table_name (
             id mediumint(11) NOT NULL AUTO_INCREMENT,
-            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
-            name varchar(255) NOT NULL,
-            slug varchar(255) NOT NULL,
+            category_name varchar(255) NOT NULL,
+            category_slug varchar(255) NOT NULL,
             parent int(10) DEFAULT 0,
+            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
             UNIQUE KEY id (id)
         ) $charset_collate;";
     
@@ -231,6 +260,61 @@ if (!function_exists('tm_review_product_category_db')) {
     }
 }
 
+// questions table
+if (!function_exists('tm_review_questions_db')) {
+    add_action( 'after_setup_theme', 'tm_review_questions_db' );
+    function tm_review_questions_db() {
+
+        global $wpdb;
+        $charset_collate = $wpdb->get_charset_collate();
+        $table_name = $wpdb->prefix . 'questions';
+        $user_table = $wpdb->prefix . 'users';
+        $product_table = $wpdb->prefix . 'product';
+    
+        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+            id mediumint(11) NOT NULL AUTO_INCREMENT,
+            body varchar(255) NOT NULL,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            product_id mediumint(11) NOT NULL,
+            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
+            FOREIGN KEY (user_id) REFERENCES $user_table(id),
+            FOREIGN KEY (product_id) REFERENCES $product_table(id),
+            UNIQUE KEY id (id)
+        ) $charset_collate;";
+    
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+    }
+}
+// questions reply
+if (!function_exists('tm_review_question_reply_db')) {
+    add_action( 'after_setup_theme', 'tm_review_question_reply_db' );
+    function tm_review_question_reply_db() {
+
+        global $wpdb;
+        $charset_collate = $wpdb->get_charset_collate();
+        $table = $wpdb->prefix . 'question_reply';
+        $questions_table = $wpdb->prefix . 'questions';
+        $user_table = $wpdb->prefix . 'users';
+        $product_table = $wpdb->prefix . 'product';
+    
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            id mediumint(11) NOT NULL AUTO_INCREMENT,
+            body varchar(255) NOT NULL,
+            question_id mediumint(11) NOT NULL,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            product_id mediumint(11) NOT NULL,
+            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
+            FOREIGN KEY (question_id) REFERENCES $questions_table(id),
+            FOREIGN KEY (user_id) REFERENCES $user_table(id),
+            FOREIGN KEY (product_id) REFERENCES $product_table(id),
+            UNIQUE KEY id (id)
+        ) $charset_collate;";
+    
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+    }
+}
 
 // retrieves the attachment ID from the file URL
 function tm_review_get_image_id($image_url) {
@@ -251,6 +335,13 @@ add_filter( 'init', function( $template ) {
     if ( isset( $_GET['product_id'] ) ) {
         $store_id = $_GET['product_id'];
         include get_template_directory() . '/page-templates/single-product.php';
+        die;
+    }
+} );
+add_filter( 'init', function( $template ) {
+    if ( isset( $_GET['user_id'] ) ) {
+        $store_id = $_GET['user_id'];
+        include get_template_directory() . '/page-templates/single-user.php';
         die;
     }
 } );

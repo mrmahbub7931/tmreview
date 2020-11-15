@@ -24,7 +24,42 @@
                             <div class="form-group">
                                 <input type="text" name="check_price" id="check_price" class="widefat" placeholder="Check price url">
                             </div>
+                            <?php 
+                                global $wpdb;
+                                $table = $wpdb->prefix.'categories';
+                                $sql = "SELECT * FROM $table";
+                                $single_form = $wpdb->get_results($sql) or 0; 
+                                if ($single_form !== 0) :
+                            ?>
+                            <div class="form-field" style="margin-top: 10px;">
+                                <label for="category_id">Categories</label>
+                                <select name="category_id" id="category_id">
+                                    <option value="">Select Category</option>
+                                    <?php foreach ($single_form as $item) :?>
+                                    <option value="<?php echo $item->id?>"><?php echo $item->category_name?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php endif; ?>
                             
+                            <?php 
+                                global $wpdb;
+                                $table = $wpdb->prefix.'brand';
+                                $sql = "SELECT * FROM $table";
+                                $single_form = $wpdb->get_results($sql) or 0; 
+                                if ($single_form !== 0) :
+                            ?>
+                            <div class="form-field" style="margin-top: 10px;">
+                                <label for="brand_id">Brands</label>
+                                <select name="brand_id" id="brand_id">
+                                    <option value="">Select Brand</option>
+                                    <?php foreach ($single_form as $item) :?>
+                                    <option value="<?php echo $item->id?>"><?php echo $item->brand_name?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php endif; ?>
+
                         
                     </div>
                 </div>
@@ -82,9 +117,9 @@
 
                 check_price = document.getElementById("check_price").value,
                 product_logo = document.getElementById("store_logo"),
+                brand_id = document.getElementById("brand_id").value,
+                category_id = document.getElementById("category_id").value,
                 message =  document.querySelector('.message');
-                // console.log(number_text.toString() + " " + product_name + " " + product_slug + " " + description.toString() + " "+ check_price + " "+product_logo);
-
                 if (product_name && store_logo != null) {
                     product_logo = store_logo.src;
                     jQuery.ajax({
@@ -97,6 +132,8 @@
                             number_text: number_text.toString(),
                             description: description.toString(),
                             check_price: check_price,
+                            category_id: category_id,
+                            brand_id: brand_id,
                             product_logo: product_logo
                         },
                         success: function(response) {

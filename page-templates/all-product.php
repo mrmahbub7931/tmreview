@@ -2,6 +2,12 @@
     <?php
     global $wpdb;
     $table = $wpdb->prefix.'product'; 
+        $category_sql = 'SELECT * from '.$wpdb->prefix.'product INNER JOIN '.$wpdb->prefix.'categories ON '.$wpdb->prefix.'categories.id = '.$wpdb->prefix.'product.category_id';
+        
+        $brand_sql = 'SELECT * from '.$wpdb->prefix.'product INNER JOIN '.$wpdb->prefix.'brand ON '.$wpdb->prefix.'brand.id = '.$wpdb->prefix.'product.brand_id';
+
+        $selected_category = $wpdb->get_results($category_sql);
+        $selected_brand = $wpdb->get_results($brand_sql);
         if (isset($_REQUEST['view'])) : 
             $storeID = sanitize_key( $_GET['id'] );
             $sql = "SELECT * FROM $table WHERE id=$storeID";
@@ -24,6 +30,7 @@
             </tr>
         </thead>
     </table>
+    
     <?php foreach ($single_form as $single_data) : ?>
         <form id="update-product-form" action="#" method="post" data-url="<?php echo admin_url('admin-ajax.php'); ?>">
     <div id="dashboard-widgets-wrap">
@@ -60,6 +67,39 @@
                             <div class="form-group">
                                 <input type="text" name="check_price" id="check_price" class="widefat" placeholder="Check price url" value="<?php echo $single_data->check_price?>">
                             </div>
+                            <?php
+                                $table = $wpdb->prefix.'categories';
+                                $sql = "SELECT * FROM $table";
+                                $single_form = $wpdb->get_results($sql) or 0; 
+                                if ($single_form !== 0) :
+                            ?>
+                            <div class="form-field" style="margin-top: 10px;">
+                                <label for="category_id">Categories</label>
+                                <select name="category_id" id="category_id">
+                                    <option value="">Select Category</option>
+                                    <?php foreach ($single_form as $item) :?>
+                                    <option <?php if($item->id === $selected_category[0]->id) : ?> selected <?php endif; ?> value="<?php echo $item->id?>"><?php echo $item->category_name?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php endif; ?>
+                            
+                            <?php
+                                $table = $wpdb->prefix.'brand';
+                                $sql = "SELECT * FROM $table";
+                                $single_form = $wpdb->get_results($sql) or 0; 
+                                if ($single_form !== 0) :
+                            ?>
+                            <div class="form-field" style="margin-top: 10px;">
+                                <label for="brand_id">Brands</label>
+                                <select name="brand_id" id="brand_id">
+                                    <option value="">Select Brand</option>
+                                    <?php foreach ($single_form as $item) :?>
+                                    <option <?php if($item->id === $selected_brand[0]->id) : ?> selected <?php endif; ?> value="<?php echo $item->id?>"><?php echo $item->brand_name?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php endif; ?>
                             
                         
                     </div>
@@ -96,8 +136,8 @@
     </div>
     </form>
     <?php endforeach;endif; else: ?>
-    <h1 class="wp-heading-inline">All stores</h1>
-    <a href="<?php echo admin_url( 'admin.php?page=add-store' )?>" class="page-title-action">Add store</a>
+    <h1 class="wp-heading-inline">All Products</h1>
+    <a href="<?php echo admin_url( 'admin.php?page=add-product' )?>" class="page-title-action">Add product</a>
     <form method="get" id="posts-filter">
         <p class="search-box">
             <label class="screen-reader-text" for="post-search-input">Search stores:</label>
@@ -110,9 +150,11 @@
             <tr>
             <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">Select All</label><input id="cb-select-all-1" type="checkbox"></td>
                 <th>#</th>
+                <th>Product image</th>
                 <th>Product name</th>
+                <th>Category name</th>
+                <th>Brand name</th>
                 <th>Created Date</th>
-                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -129,19 +171,58 @@
                     <label class="screen-reader-text" for="cb-select-1">Select Hello world!</label>
                     <input id="cb-select-1" type="checkbox" name="product[]" value="1">
 			    </th>
-                <td><?php echo $key + 1?></td>
-                <td><?php echo $data->name; ?></td>
-                <td><?php echo date('F d, Y', strtotime($data->time)) ?></td>
-                <td>
-                    <a href="<?php echo admin_url('admin.php?page=product&view=results&id='.$data->id) ?>" class="button button-secondary">Details</a>
-                    <a href="<?php echo home_url( '/'.$data->slug.'?product_id='.$data->id ) ?>" class="button button-secondary">View Page</a>
+                <td><?php echo $key + 1?>
+                <div class="row-actions"><span class="edit"><a href="<?php echo admin_url('admin.php?page=product&view=results&id='.$data->id) ?>">Edit</a> | </span><span class="inline hide-if-no-js"> | </span><span class="trash"><a href="#" class="submitdelete">Trash</a> | </span><span class="view"><a href="<?php echo home_url( '/'.$data->slug.'?product_id='.$data->id ) ?>" rel="bookmark">View</a></span></div>
                 </td>
+                <td><img src="<?php echo $data->product_logo; ?>" alt="" style="width: 60px; height: 60px;"></td>
+                <td><?php echo $data->name; ?></td>
+                <td><?php echo $selected_category[0]->category_name ?></td>
+                <td><?php echo $selected_brand[0]->brand_name ?></td>
+                <td><?php echo date('F d, Y', strtotime($data->time)) ?></td>
             </tr>
              <?php endforeach; }?>
         </tbody>
     </table>
                 <?php endif; ?>
+
+    <form action="" method="post" name="uploadProduct" enctype="multipart/form-data">
+        <div class="form-field">
+            <label for="file">Import CSV Data: </label>
+            <input type="file" name="file" id="file" accept=".csv">
+        </div>
+        <input type="submit" value="import" name="p_import" class="button button-primary">
+    </form>
 </div>
+<?php
+    
+    if (isset($_POST['p_import'])) {
+        $import_product_table = $wpdb->prefix.'product'; 
+        $filename = $_FILES['file']['tmp_name'];
+        if ($_FILES['file']['size'] > 0) {
+            $file = fopen($filename,"r");
+            $data = fgetcsv($file,10000,",");
+
+            while ($column = fgetcsv($file,10000,",")) {
+                $id = $column[0];
+                $name = $column[1];
+	            $slug = $column[2];
+	            $description = $column[3];
+	            $number_text = $column[4];
+                $check_price = $column[5];
+                $data = [
+                    'id' => $id,
+                    'name' => $name,
+                    'slug' => $slug,
+                    'description' => $description,
+                    'number_text' => $number_text,
+                    'check_price' => $check_price,
+                ];
+                $wpdb->insert($import_product_table,$data);
+            }
+        }
+    }
+
+?>
 <script type="text/javascript">
     var form = document.getElementById('update-product-form'),
         form_submit =  document.querySelector('.update_product');
@@ -169,6 +250,8 @@
 
                 check_price = document.getElementById("check_price").value,
                 product_logo = document.getElementById("store_logo"),
+                brand_id = document.getElementById("brand_id").value,
+                category_id = document.getElementById("category_id").value,
                 message =  document.querySelector('.message');
                 // console.log(form_id + " " + number_text.toString() + " " + product_name + " " + product_slug + " " + description.toString() + " "+ check_price);
 
@@ -185,6 +268,8 @@
                             number_text: number_text.toString(),
                             description: description.toString(),
                             check_price: check_price,
+                            category_id: category_id,
+                            brand_id: brand_id,
                             product_logo: product_logo
                         },
                         success: function(response) {

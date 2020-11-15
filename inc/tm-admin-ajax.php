@@ -43,9 +43,21 @@ add_action('wp_ajax_nopriv_create_brand_product', 'tm_review_create_brand_produc
 add_action('wp_ajax_update_brand_product', 'tm_review_update_brand_product_callback');
 add_action('wp_ajax_nopriv_update_brand_product', 'tm_review_update_brand_product_callback');
 
+// review update ajax
+add_action('wp_ajax_review_ajax_update', 'tm_review_review_ajax_update_callback');
+add_action('wp_ajax_nopriv_review_ajax_update', 'tm_review_review_ajax_update_callback');
+
 // product brand read ajax
 add_action('wp_ajax_display_product_brand', 'tm_review_display_product_brand_callback');
 add_action('wp_ajax_nopriv_display_product_brand', 'tm_review_display_product_brand_callback');
+
+// Question ajax
+add_action('wp_ajax_make_question_fn', 'tm_review_make_question_fn_callback');
+add_action('wp_ajax_nopriv_make_question_fn', 'tm_review_make_question_fn_callback');
+
+// Question reply ajax
+add_action('wp_ajax_make_reply_fn', 'tm_review_make_reply_fn_callback');
+add_action('wp_ajax_nopriv_make_reply_fn', 'tm_review_make_reply_fn_callback');
 
 
 // store update callback function
@@ -99,6 +111,8 @@ function tm_review_product_form_ajax_update_callback()
 	$description = wp_strip_all_tags($_POST['description']);
 	$number_text = wp_strip_all_tags($_POST['number_text']);
 	$check_price = wp_strip_all_tags($_POST['check_price']);
+	$category_id = wp_strip_all_tags($_POST['category_id']);
+	$brand_id = wp_strip_all_tags($_POST['brand_id']);
 	$product_logo = wp_strip_all_tags($_POST['product_logo']);
 
 	$data = [
@@ -107,6 +121,8 @@ function tm_review_product_form_ajax_update_callback()
 		'description' => $description,
 		'number_text' => $number_text,
 		'check_price' => $check_price,
+		'category_id' => $category_id,
+		'brand_id' => $brand_id,
 		'product_logo'	=>	$product_logo,
 	];
 
@@ -165,6 +181,8 @@ function tm_review_product_form_ajax_save_callback()
 	$description = wp_strip_all_tags($_POST['description']);
 	$number_text = wp_strip_all_tags($_POST['number_text']);
 	$check_price = wp_strip_all_tags($_POST['check_price']);
+	$category_id = wp_strip_all_tags($_POST['category_id']);
+	$brand_id = wp_strip_all_tags($_POST['brand_id']);
 	$product_logo = wp_strip_all_tags($_POST['product_logo']);
 
 	$data = [
@@ -173,6 +191,8 @@ function tm_review_product_form_ajax_save_callback()
 		'description' => $description,
 		'number_text' => $number_text,
 		'check_price' => $check_price,
+		'category_id' => $category_id,
+		'brand_id' => $brand_id,
 		'product_logo'	=>	$product_logo,
 	];
 
@@ -190,6 +210,9 @@ function tm_review_product_review_save_callback()
 	$star = wp_strip_all_tags($_POST['star']);
 	$title = wp_strip_all_tags($_POST['title']);
 	$body = wp_strip_all_tags($_POST['body']);
+	$age_group = wp_strip_all_tags($_POST['age_group']);
+	$hair_type = wp_strip_all_tags($_POST['hair_type']);
+	$skin_type = wp_strip_all_tags($_POST['skin_type']);
 	$user_id = wp_strip_all_tags($_POST['user_id']);
 	$product_id = wp_strip_all_tags($_POST['product_id']);
 	$nonce = wp_strip_all_tags($_POST['nonce']);
@@ -199,6 +222,9 @@ function tm_review_product_review_save_callback()
 		'title' => $title,
 		'body' => $body,
 		'star' => $star,
+		'age_group' => $age_group,
+		'hair_type' => $hair_type,
+		'skin_type' => $skin_type,
 		'user_id' => $user_id,
 		'product_id'	=>	$product_id,
 	];
@@ -236,8 +262,8 @@ function tm_review_create_category_product_callback()
 	} else {
 	 
 		$data = [
-			'name' => $name,
-			'slug' => $slug,
+			'category_name' => $name,
+			'category_slug' => $slug,
 			'parent' => $parent,
 		];
 		$formdata = $wpdb->insert($table,$data);
@@ -259,11 +285,11 @@ function tm_review_display_category_product_callback($parent_id = 0)
 	$sql = "SELECT * FROM $table";
 	$single_form = $wpdb->get_results($sql);
 	
-
+	// print_r($single_form);
 	foreach ($single_form as $single_data) :
-		$cat_sql = "SELECT name FROM $table WHERE parent=$single_data->id";
+		$cat_sql = "SELECT category_name FROM $table WHERE parent=$single_data->id";
 		$catParent = $wpdb->get_results($cat_sql);
-		$row .="<tr class='cat-".$single_data->id."'><th>".$single_data->name."</th><th>".$single_data->slug."</th><th>".$catParent[0]->name."</th><th></th></tr>";
+		$row .="<tr class='cat-".$single_data->id."'><th>".$single_data->category_name."</th><th>".$single_data->category_slug."</th><th>".$catParent[0]->category_name."</th><th></th></tr>";
 	endforeach;
 	echo $row;
 
@@ -291,8 +317,8 @@ function tm_review_create_brand_product_callback()
 	} else {
 	 
 		$data = [
-			'name' => $name,
-			'slug' => $slug,
+			'brand_name' => $name,
+			'brand_slug' => $slug,
 			'description' => $description,
 			'brand_logo' => $brand_logo,
 		];
@@ -320,8 +346,8 @@ function tm_review_update_brand_product_callback()
 	} else {
 	 
 		$data = [
-			'name' => $name,
-			'slug' => $slug,
+			'brand_name' => $name,
+			'brand_slug' => $slug,
 			'description' => $description,
 			'brand_logo' => $brand_logo,
 		];
@@ -349,9 +375,93 @@ function tm_review_display_product_brand_callback()
 	
 
 	foreach ($single_form as $key => $single_data) :
-		$row .="<tr class='brand-".$single_data->id."'><th>".($key + 1)."</th><th><img src='".$single_data->brand_logo."' style='width: 60px; height: 60px;'/></th><th>".$single_data->name."</th><th>".$single_data->slug."</th><th><a href='".admin_url('admin.php?page=brand&brand_edit=result&id='.$single_data->id)."' class='button button-secondary'>Edit</a><a href='".admin_url('admin.php?page=brand&brand_delete=result&id='.$single_data->id)."' class='button button-primary delete-brand' style='margin-left: 5px;'>Delete</a></th></tr>";
+		$row .="<tr class='brand-".$single_data->id."'><th>".($key + 1)."</th><th><img src='".$single_data->brand_logo."' style='width: 60px; height: 60px;'/></th><th>".$single_data->brand_name."</th><th>".$single_data->brand_slug."</th><th><a href='".admin_url('admin.php?page=brand&brand_edit=result&id='.$single_data->id)."' class='button button-secondary'>Edit</a><a href='".admin_url('admin.php?page=brand&brand_delete=result&id='.$single_data->id)."' class='button button-primary delete-brand' style='margin-left: 5px;'>Delete</a></th></tr>";
 	endforeach;
 	echo $row;
 
 	die();
+}
+
+function tm_review_review_ajax_update_callback()
+{
+	global $wpdb;
+	$table = $wpdb->prefix.'product_review';
+
+	$title = wp_strip_all_tags($_POST['review_title']);
+	$body = wp_strip_all_tags($_POST['body']);
+	$status = wp_strip_all_tags($_POST['status']);
+	$verify = wp_strip_all_tags($_POST['verify']);
+	$review_id = wp_strip_all_tags($_POST['review_id']);
+	// echo $title . ' '.$body.' '.$status.' '.$review_id.' '.$verify;
+	if ( ! isset( $review_id ) ) {
+	 
+		print 'Sorry, your nonce did not verify.';
+		exit;
+	  
+	 } else {
+	  
+		 $data = [
+			 'title' => $title,
+			 'body' => $body,
+			 'status' => $status,
+			 'verify' => $verify,
+			 'id' => $review_id,
+		 ];
+		//  print_r($data);
+		 $condition = [
+			 'id'	=>	$review_id
+		 ];
+		 $wpdb->update($table,$data,$condition);
+	 }
+	die();
+}
+
+function tm_review_make_question_fn_callback()
+{
+	global $wpdb;
+	$table = $wpdb->prefix.'questions';
+
+	$user_id = wp_strip_all_tags($_POST['user_id']);
+	$body = wp_strip_all_tags($_POST['body']);
+	$product_id = wp_strip_all_tags($_POST['product_id']);
+	// echo $body . ' '.$user_id.' '.$product_id;
+
+	$data = [
+		'body' => $body,
+		'user_id' => $user_id,
+		'product_id' => $product_id,
+	];
+	if (is_user_logged_in()) {
+		$formdata = $wpdb->insert($table,$data);
+		echo 1;
+	}else {
+		$redirect = site_url( '/' ) . login;
+		echo $redirect;
+	}
+	die;
+}
+function tm_review_make_reply_fn_callback()
+{
+	global $wpdb;
+	$table = $wpdb->prefix.'question_reply';
+
+	$question_id = wp_strip_all_tags($_POST['question_id']);
+	$user_id = wp_strip_all_tags($_POST['user_id']);
+	$body = wp_strip_all_tags($_POST['body']);
+	$product_id = wp_strip_all_tags($_POST['product_id']);
+	echo $body . ' '.$user_id.' '.$product_id.' '.$question_id;
+
+	// $data = [
+	// 	'body' => $body,
+	// 	'user_id' => $user_id,
+	// 	'product_id' => $product_id,
+	// ];
+	// if (is_user_logged_in()) {
+	// 	$formdata = $wpdb->insert($table,$data);
+	// 	echo 1;
+	// }else {
+	// 	$redirect = site_url( '/' ) . login;
+	// 	echo $redirect;
+	// }
+	die;
 }

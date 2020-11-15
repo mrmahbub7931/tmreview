@@ -44,7 +44,7 @@
                             <select name="parent" id="parent" class="postform">
                                 <option value="0">None</option>
                                 <?php foreach ($categories as $category) :  ?>
-                                <option value="<?php echo $category->id?>"><?php echo $category->name?></option>
+                                <option value="<?php echo $category->id?>"><?php echo $category->category_name?></option>
                                 <?php  endforeach; ?>
                             </select>
                             <p>Categories, unlike tags, can have a hierarchy. You might have a Jazz category, and under that have children categories for Bebop and Big Band. Totally optional.</p>

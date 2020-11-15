@@ -92,6 +92,9 @@ var productReviewCreate = (function ($) {
                         body = form.find("#review-message-box").val(),
                         title = form.find("#review_title").val(),
                         nonce = form.find("#tm_add_product_review_security").val(),
+                        age_group = form.find("#age_group").val(),
+                        hair_type = form.find("#hair_type").val(),
+                        skin_type = form.find("#skin_type").val(),
                         user_id = form.find("#user_id").val(),
                         product_id = form.find("#product_id").val(),
                         product_slug = form.find("#product_slug").val(),
@@ -107,11 +110,15 @@ var productReviewCreate = (function ($) {
                                 title: title,
                                 body: body,
                                 star: star,
+                                age_group: age_group,
+                                hair_type: hair_type,
+                                skin_type: skin_type,
                                 user_id: user_id,
                                 product_id: product_id
 
                             },
                             success: function(response){
+                                // console.log(response);
                                 if (response === "1") {
                                     form.find('.message').html("Thanks for reviewing the products");
                                     form.find('.message').css({'color':'#4CAF50'});
@@ -203,6 +210,83 @@ var productCreate = (function($){
 
 })(jQuery)
 
+var questionCreate = (function ($) {
+    return {
+        questionCreatefn: function () {
+            $(document).ready(function () {
+                var question_form = $("#ask_question_form");
+                question_form.on("submit",function (e) {
+                   e.preventDefault();
+                   var ajaxurl = question_form.data('url'),
+                        user_id = $("#user_id").val(),
+                        product_id = $("#product_id").val(),
+                        body = $("#body").val();
+                        // console.log(user_id);
+
+                $.ajax({
+                    type: 'post',
+
+                    url: ajaxurl,
+                    data: {
+                        action: "make_question_fn",
+                        user_id: user_id,
+                        product_id: product_id,
+                        body: body
+                    },
+                    success: function (response) {
+                        if (response === "1") {
+                            question_form.find('.message').html("Thanks for your question.we will reply as soon as possible");
+                            question_form.find('.message').css({'color':'#4CAF50'});
+                            question_form[0].reset();
+                        }else{
+                            window.location.href = response;
+                        }
+                    }
+                });
+
+               }); 
+            });
+        },
+        // replyQCreatefn: function () {
+        //     var reply_question_form = $('#reply_question_form');
+        //     reply_question_form.on("submit",function (e) {
+        //        e.preventDefault(); 
+        //     //    var ajaxurl = reply_question_form.data('url'),
+        //     //     question_id = $("#question_id").val(),
+        //     //     user_id = $("#user_id").val(),
+        //     //     product_id = $("#product_id").val(),
+        //     //     body = $("#body").val();
+        //     //     console.log(question_id + ' '+ body);
+        //         // $.ajax({
+        //         //     type: 'post',
+
+        //         //     url: ajaxurl,
+        //         //     data: {
+        //         //         action: "make_reply_fn",
+        //         //         user_id: question_id,
+        //         //         user_id: user_id,
+        //         //         product_id: product_id,
+        //         //         body: body
+        //         //     },
+        //         //     success: function (response) {
+        //         //         console.log(response);
+        //         //         // if (response === "1") {
+        //         //         //     question_form[0].reset();
+        //         //         // }else{
+        //         //         //     window.location.href = response;
+        //         //         // }
+        //         //     }
+        //         // });
+        //     });
+        // },
+        init: function () {
+            this.questionCreatefn();
+            // this.replyQCreatefn();
+        }
+    }
+})(jQuery)
+
 userCreate.init();
 productReviewCreate.init();
 productCreate.init();
+questionCreate.init();

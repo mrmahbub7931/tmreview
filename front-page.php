@@ -602,7 +602,7 @@
                     <div class="add-to-cart-wrapper">
                         <div class="add-to-cart">
                             <span class="wishlist"><a href="#"><i class="far fa-heart"></i></a></span>
-                            <a href="<?php echo home_url( '/'.$product->slug.'?product_id='.$product->id ) ?>" class="add-to-cart-btn">View Review</a>
+                            <a class="add-to-cart-btn" href="<?php echo home_url( '/'.$product->slug.'?product_id='.$product->id ) ?>">View Review</a>
                         </div>
                     </div>
                 </div>

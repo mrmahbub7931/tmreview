@@ -10,13 +10,9 @@
             $sql = "SELECT * FROM $table WHERE id=$productID";
             $single_form = $wpdb->get_results($sql) or "data not found";
 
-            $sql_review = "SELECT * FROM $product_review_table WHERE product_id=$productID";
+            $sql_review = "SELECT * FROM $product_review_table WHERE product_id=$productID and status=1";
             $product_reviews = $wpdb->get_results($sql_review) or "data not found";
 
-                   
-            //      echo "<pre>";
-            // print_r();exit;
-                    
                     
                     
                     if (count($single_form) > 0) :
@@ -150,19 +146,17 @@
                 <?php foreach ($product_reviews as $product_review) :
                     $sql_user = "SELECT * FROM $user_table WHERE ID=$product_review->user_id";
                     $user_form = $wpdb->get_results($sql_user) or "data not found";
-
-                    $review_user = "SELECT count(user_id) as total_review FROM $product_review_table WHERE user_id=$product_review->user_id";
+                    $review_user = "SELECT count(user_id) as total_review FROM $product_review_table WHERE user_id=$product_review->user_id and status=1";
                     $total_review_user = $wpdb->get_results($review_user) or "data not found";
-                    // echo "<pre>" .print_r($total_review_user[0]->total_review). "</pre>";exit;
                 ?>
-                        <div class="review-box">
+                    <div class="review-box">
                     <div class="user-part">
                         <div class="user-box">
                             <div class="thumb">
                                 <a href="#"><img src="<?php echo esc_url(get_template_directory_uri())?>/assets/img/mahbub.jpg" alt=""></a>
                             </div>
                             <div class="user-desc">
-                                <a href="#"><h3><?php echo $user_form[0]->display_name; ?></h3></a>
+                                <a href="<?php echo home_url( '/user/'.$user_form[0]->user_login.'?user_id='.$user_form[0]->ID ); ?>"><h3><?php echo $user_form[0]->display_name; ?></h3></a>
                                 <span class="count-review"><i class="fas fa-user-edit"></i> <a href="#"><?php echo $total_review_user[0]->total_review;?> reviews</a></span>
                             </div>
                         </div>
@@ -210,7 +204,9 @@
                                         <?php endif; ?>
                                     
                                 </ul>
+                                <?php if($product_review->verify === '1') : ?>
                                 <span><i class="fas fa-check-circle"></i> Verified</span>
+                                <?php endif; ?>
                             </div>
                             <div class="review-part-top-right">
                                 <span class="date"><?php echo date('F d, Y', strtotime($product_review->time)) ?></span>
@@ -255,17 +251,63 @@
                         <li><a href="#" class="next-paginate"><i class="ion-ios-arrow-right"></i></a></li>
                     </ul>
                 </div> <!-- end review-paginate  -->
+                <div class="make-question-area" style="margin: 10px 0;">
+                    <button type="button" class="review_primary_btn" data-toggle="collapse" href="#askQuestion" role="button" aria-expanded="false" aria-controls="askQuestion">Ask Question</button>
+                    <div class="collapse" id="askQuestion">
+                        <div class="card card-body" style="border-radius: 0px;">
+                            <form action="#" method="post" id="ask_question_form" data-url="<?php echo admin_url('admin-ajax.php'); ?>">
+                                <?php $user = wp_get_current_user();?>
+                                <input type="hidden" name="user_id" id="user_id" value="<?php echo $user->ID ?>">
+                                <input type="hidden" name="product_id" id="product_id" value="<?php echo $productID ?>">
+                                <div class="form-group">
+                                    <label for="body"></label>
+                                    <textarea name="body" id="body" style="width: 100%;resize: none" rows="5" class="form-control"></textarea>
+                                </div>
+                                <button class="review_secondary_btn" type="submit">Submit</button>
+                                <span class="message"></span>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <?php
+                $question_table = $wpdb->prefix.'questions';  
+                $q_sql = "SELECT * FROM $question_table WHERE product_id=$productID";
+                $product_questions = $wpdb->get_results($q_sql) or "data not found";
+                // print_r($product_questions);
+                ?>
                 <div class="single-product-qa">
-                    <h3 class="title">Question about this product <span>(12)</span></h3>
+                    <h3 class="title">Question about this product <span>(<?php echo count($product_questions);?>)</span></h3>
+                    <?php foreach ($product_questions as $key => $product_question) :
+                    $user_sql = 'SELECT user_login, display_name from '.$wpdb->prefix.'questions INNER JOIN '.$wpdb->prefix.'users ON '.$wpdb->prefix.'users.ID = '.$wpdb->prefix.'questions.user_id';
+                    $q_user_form = $wpdb->get_results($user_sql) or "data not found";
+                    ?>
                     <div class="question-box qa-box-wrap">
                         <span>Q</span>
                         <div class="qa-box">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus dicta ex quisquam?</p>
+                            <p><?php echo $product_question->body; ?></p>
                             <div class="question-details">
-                                <a href="#" class="user-name">Habiba</a>
+                            
+                                <a href="#" class="user-name"><?php echo $q_user_form[$key]->display_name; ?></a>
+                            
                                 <span class="sep"> - </span>
                                 <p>3 Days ago</p>
-                                <a href="#" class="reply-question">Reply</a>
+                                <button class="reply-question" data-toggle="collapse" href="#replyQuestion<?php echo $product_question->id; ?>" role="button" aria-expanded="false" aria-controls="replyQuestion<?php echo $product_question->id; ?>">Reply</button>
+                            </div>
+                            <div class="collapse" id="replyQuestion<?php echo $product_question->id; ?>">
+                                <div class="card card-body" style="border-radius: 0px;">
+                                    <form action="#" method="post" id="reply_question_form" data-url="<?php echo admin_url('admin-ajax.php'); ?>">
+                                        <?php $user = wp_get_current_user();?>
+                                        <input type="hidden" name="question_id" id="question_id" value="<?php echo $product_question->id; ?>">
+                                        <input type="hidden" name="user_id" id="user_id" value="<?php echo $user->ID ?>">
+                                        <input type="hidden" name="product_id" id="product_id" value="<?php echo $productID ?>">
+                                        <div class="form-group">
+                                            <label for="body"></label>
+                                            <textarea name="body" id="body" style="width: 100%;resize: none" rows="2" class="form-control"></textarea>
+                                        </div>
+                                        <button class="review_secondary_btn" type="submit">Submit</button>
+                                        <span class="message"></span>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -282,8 +324,9 @@
                             </div>
                         </div>
                     </div>
-
+                    <?php endforeach; ?>
                 </div>
+                
             </div> <!-- end col-lg-9 -->
             <div class="col-12 col-lg-3"></div> <!-- end col-lg-3 -->
         </div>
@@ -293,3 +336,83 @@
 </div><!-- #page-wrapper -->
 
 <?php endif;endif;get_footer(); ?>
+
+<script type="text/javascript">
+    // reply form controller
+var form_reply = (function () {
+    return {
+        switchForm: function (e) {
+            e.preventDefault();
+            form_submit.setAttribute("disabled", "");
+            currentForm = e.currentTarget;
+            var question_id = currentForm.querySelector('#question_id').value,
+                user_id = currentForm.querySelector('#user_id').value,
+                product_id = currentForm.querySelector('#product_id').value,
+                body = currentForm.querySelector('#body').value,
+                form_submit = currentForm.querySelector('button');
+                ajaxurl = currentForm.dataset.url;
+            // console.log(question_id+' '+user_id+' '+product_id+' '+body+' '+ajaxurl);
+            // console.log(form_submit);
+            if (body !== '') {
+                jQuery.ajax({
+                    url: ajaxurl,
+                    type: 'post',
+                    data: {
+                        action: 'make_reply_fn',
+                        question_id: question_id,
+                        user_id: user_id,
+                        product_id: product_id,
+                        body: body
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        // message.textContent = "Successfully Updated!";
+                        // message.style.color = "#4CAF50";
+                        form_submit.removeAttribute("disabled");
+                    }
+                });
+            }
+            
+        }
+    }
+})();
+
+
+// GLOBAL SCOPE CONTROLLER
+var Controller = (function (forms_reply) {
+
+    var NodeListLoop = function (list,callback) {
+        for(let i = 0; i<list.length; i++) {
+            callback(list[i],i);
+        }
+    }
+
+    // all event setup function
+    var setupEvenetListerner = function () {
+        
+        window.addEventListener("load",() => {
+            var forms;
+            forms = document.querySelectorAll("#reply_question_form");
+            
+            if (forms) {
+                NodeListLoop(forms,function (cur) {
+                    cur.addEventListener("submit",forms_reply.switchForm);
+                });
+            }
+
+            
+        });
+
+    };
+
+    return {
+        init: function () {
+            // call event listener function
+            setupEvenetListerner();
+        }
+    }
+})(form_reply);
+
+// initialize
+Controller.init();
+</script>

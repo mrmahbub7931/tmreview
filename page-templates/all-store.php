@@ -109,6 +109,7 @@
             <tr>
             <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">Select All</label><input id="cb-select-all-1" type="checkbox"></td>
                 <th>#</th>
+                <th>store logo</th>
                 <th>store name</th>
                 <th>Created Date</th>
                 <th>Action</th>
@@ -129,6 +130,7 @@
                     <input id="cb-select-1" type="checkbox" name="store[]" value="1">
 			    </th>
                 <td><?php echo $key + 1?></td>
+                <td><img src="<?php echo $data->store_logo; ?>" alt="" style="width: 60px; height: 60px;"></td>
                 <td><?php echo $data->name; ?></td>
                 <td><?php echo date('F d, Y', strtotime($data->time)) ?></td>
                 <td>
@@ -140,8 +142,52 @@
         </tbody>
     </table>
     <?php endif; ?>
+    <form action="" method="post" name="uploadStore" enctype="multipart/form-data">
+        <div class="form-field">
+            <label for="file">Import CSV Data: </label>
+            <input type="file" name="file" id="file" accept=".csv">
+        </div>
+        <input type="submit" value="import" name="s_import" class="button button-primary">
+    </form>
 </div>
+<?php
+    
+    if (isset($_POST['s_import'])) {
+        $import_store_table = $wpdb->prefix.'store'; 
+        $filename = $_FILES['file']['tmp_name'];
+        if ($_FILES['file']['size'] > 0) {
+            $file = fopen($filename,"r");
+            $data = fgetcsv($file,10000,",");
 
+            while ($column = fgetcsv($file,10000,",")) {
+                $id = $column[0];
+                $name = $column[1];
+	            $slug = $column[2];
+	            $description = $column[3];
+	            $facebook_url = $column[4];
+                $youtube_url = $column[5];
+                $instagram_url = $column[6];
+                $linkedin_url = $column[7];
+                $website_url = $column[8];
+                $affiliate_url = $column[9];
+                $data = [
+                    'id' => $id,
+                    'name' => $name,
+                    'slug' => $slug,
+                    'description' => $description,
+                    'facebook_url' => $facebook_url,
+                    'youtube_url' => $youtube_url,
+                    'instagram_url' => $instagram_url,
+                    'linkedin_url' => $linkedin_url,
+                    'website_url' => $website_url,
+                    'affiliate_url' => $affiliate_url,
+                ];
+                $wpdb->insert($import_store_table,$data);
+            }
+        }
+    }
+
+?>
 <script type="text/javascript">
     var form = document.getElementById('update-store-form'),
         form_submit =  document.querySelector('.update_store');

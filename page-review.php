@@ -21,7 +21,10 @@ global $wpdb;
         if (isset($_REQUEST['p_id'])) : 
             $productID = sanitize_key( $_GET['p_id'] );
             $sql = "SELECT * FROM $table WHERE id=$productID";
+            $category_sql = 'SELECT category_slug FROM '.$table.' INNER JOIN '.$wpdb->prefix.'categories ON '.$wpdb->prefix.'categories.id = '.$wpdb->prefix.'product.category_id';
                     $single_form = $wpdb->get_results($sql) or die("data not found");
+                    $category_form = $wpdb->get_results($category_sql) or die("data not found");
+                    // print_r($category_form);exit;
                     if (count($single_form) > 0) :
 ?>
 
@@ -81,6 +84,40 @@ global $wpdb;
                                 <div class="review_title-div"><input type="text" name="review_title" id="review_title">
                                 <span class="icon"><i class="fas fa-pen"></i></span></div>
                             </div>
+                            <div class="form-group" style="margin: 10px 0">
+                                <label for="age_group">Age Group</label>
+                                <select name="age_group" id="age_group" class="form-control">
+                                    <option value="15-20">15 to 20</option>
+                                    <option value="21-25">21 to 25</option>
+                                    <option value="26-30">26 to 30</option>
+                                    <option value="31-35">31 to 35</option>
+                                    <option value="36-40">36 to 40</option>
+                                    <option value="41-45">41 to 45</option>
+                                    <option value="46-50">46 to 50</option>
+                                    <option value="51-55">51 to 55</option>
+                                    <option value="56-60">56 to 60</option>
+                                </select>
+                            </div>
+                            <?php if ($category_form[0]->category_slug === 'hair-product') : ?>
+                                <div class="form-group" style="margin: 10px 0">
+                                    <label for="hair_type">Hair Type</label>
+                                    <select name="hair_type" id="hair_type" class="form-control">
+                                        <option value="straight">Straight Hair</option>
+                                        <option value="wavy">Wavy Hair</option>
+                                        <option value="curly">Curly Hair</option>
+                                    </select>
+                                </div>
+                            <?php else: ?>
+                                <div class="form-group" style="margin: 10px 0">
+                                    <label for="skin_type">Skin Type</label>
+                                    <select name="skin_type" id="skin_type" class="form-control">
+                                        <option value="normal">Normal Skin</option>
+                                        <option value="dry">Dry Skin</option>
+                                        <option value="oily">Oily Skin</option>
+                                        <option value="sensitive">Sensitive Skin</option>
+                                    </select>
+                                </div>
+                            <?php endif; ?>
                         </div>
 
                         <div class="review-form-bottom">
