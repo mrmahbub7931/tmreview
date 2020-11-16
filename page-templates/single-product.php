@@ -311,20 +311,35 @@
                             </div>
                         </div>
                     </div>
+                    <?php 
+                    $question_reply = $wpdb->prefix.'question_reply';  
+                    $q_sql = "SELECT * FROM $question_reply WHERE product_id=$productID and question_id=$product_question->id";
+                    $questions_reply = $wpdb->get_results($q_sql) or "data not found";
+
+                    foreach ($questions_reply as $key => $question_reply) :
+                    $user_sql = 'SELECT user_login, display_name from '.$wpdb->prefix.'question_reply INNER JOIN '.$wpdb->prefix.'users ON '.$wpdb->prefix.'users.ID = '.$wpdb->prefix.'question_reply.user_id';
+                    $q_user_form = $wpdb->get_results($user_sql) or "data not found";
+                    // print_r($q_user_form);
                     
+                    ?>
                     <div class="answer-box qa-box-wrap">
                         <span>A</span>
                         <div class="qa-box">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus dicta ex quisquam?</p>
+                            <p><?php echo str_replace( '\\', '', $question_reply->body); ?></p>
                             <div class="question-details">
-                                <a href="#" class="user-name">Habiba</a>
+                                <a href="#" class="user-name"><?php echo $q_user_form[$key]->display_name; ?></a>
                                 <span class="sep"> - </span>
                                 <p>3 Days ago</p>
                                 <a href="#" class="reply-question">Reply</a>
                             </div>
                         </div>
                     </div>
-                    <?php endforeach; ?>
+                    <?php endforeach;endforeach; ?>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <button type="button" class="read_more_q">Read More</button>
+                        </div>
+                    </div>
                 </div>
                 
             </div> <!-- end col-lg-9 -->
@@ -343,7 +358,6 @@ var form_reply = (function () {
     return {
         switchForm: function (e) {
             e.preventDefault();
-            form_submit.setAttribute("disabled", "");
             currentForm = e.currentTarget;
             var question_id = currentForm.querySelector('#question_id').value,
                 user_id = currentForm.querySelector('#user_id').value,
@@ -351,8 +365,7 @@ var form_reply = (function () {
                 body = currentForm.querySelector('#body').value,
                 form_submit = currentForm.querySelector('button');
                 ajaxurl = currentForm.dataset.url;
-            // console.log(question_id+' '+user_id+' '+product_id+' '+body+' '+ajaxurl);
-            // console.log(form_submit);
+            form_submit.setAttribute("disabled", "");
             if (body !== '') {
                 jQuery.ajax({
                     url: ajaxurl,
@@ -365,13 +378,26 @@ var form_reply = (function () {
                         body: body
                     },
                     success: function(response) {
-                        console.log(response);
-                        // message.textContent = "Successfully Updated!";
-                        // message.style.color = "#4CAF50";
+                        // console.log(response);
                         form_submit.removeAttribute("disabled");
+                        currentForm.reset();
+                        location.reload();
                     }
                 });
             }
+
+            jQuery.ajax({
+                url: ajaxurl,
+                type: 'get',
+                data: {
+                    action: 'display_product_brand',
+                },
+                success: function(response) {
+                    // console.log(response);
+                    jQuery("#tm-brand-list").html(response); 
+                }
+            });
+
             
         }
     }
@@ -400,6 +426,20 @@ var Controller = (function (forms_reply) {
                 });
             }
 
+            var qbox = document.querySelectorAll(".single-product-qa div.qa-box-wrap"),
+                qboxarr = [...qbox],
+                read_more_q = document.querySelector('.read_more_q');
+                // read_more_q.addEventListener('click',function (e) {
+                //     e.preventDefault();
+                //     // qboxarr.slice(0,2).show();
+                // });
+                jQuery('.read_more_q').click(function () {
+                    jQuery('.single-product-qa div.qa-box-wrap:hidden').slice(0, 4).css("display", "flex");
+                    if (jQuery('.single-product-qa div.qa-box-wrap').length == jQuery('.single-product-qa div.qa-box-wrap:visible').length) {
+                        jQuery('.read_more_q ').hide();
+                    }
+                });
+            // console.log(qboxarr.slice(0,2));
             
         });
 

@@ -440,7 +440,13 @@
         </div>
     </div>
 </section>
-
+<?php
+        global $wpdb;
+        $table = $wpdb->prefix.'brand';
+            $sql = "SELECT * FROM $table";
+            $brands = $wpdb->get_results($sql) or "data not found";
+            if(count($brands) > 0) : 
+            ?>
 <section class="tmxr_top_brands section-padding" style="background: #f7f7f7">
     <div class="container">
         <div class="row">
@@ -455,51 +461,27 @@
         <div class="row">
             <div class="col-12 padd-none">
                 <div class="brands_image tmxr_flex">
+                    <?php foreach ($brands as $key => $brand) : ?>
                     <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
+                        <a href="javascript:void(0)">
+                        <img src="<?php echo $brand->brand_logo; ?>" alt="">
+                        </a>
                     </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
     </div>
 </section>
 <!-- end top brands -->
-
+<?php endif; ?>
+<?php
+        global $wpdb;
+        $table = $wpdb->prefix.'store';
+            $sql = "SELECT * FROM $table";
+            $stores = $wpdb->get_results($sql) or "data not found";
+            if(count($stores) > 0) : 
+            ?>
 <section class="tmxr_top_stores section-padding">
     <div class="container">
         <div class="row">
@@ -514,49 +496,17 @@
         <div class="row">
             <div class="col-12 padd-none">
                 <div class="brands_image tmxr_flex">
+                    <?php foreach ($stores as $key => $store) :  ?>
                     <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
+                        <a href="javascript:void(0)"><img src="<?php echo $store->store_logo?>" alt=""></a>
                     </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-                    <div class="single_brands_img">
-                        <img src="<?php echo esc_url( get_template_directory_uri(  ) )?>/assets/img/brand1.png" alt="">
-                    </div>
-
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<?php endif; ?>
 <!-- end top brands -->
 
 <section class="tmxr_top_products section-padding" style="background: #fafafa">

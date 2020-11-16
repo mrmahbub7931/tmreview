@@ -449,19 +449,19 @@ function tm_review_make_reply_fn_callback()
 	$user_id = wp_strip_all_tags($_POST['user_id']);
 	$body = wp_strip_all_tags($_POST['body']);
 	$product_id = wp_strip_all_tags($_POST['product_id']);
-	echo $body . ' '.$user_id.' '.$product_id.' '.$question_id;
 
-	// $data = [
-	// 	'body' => $body,
-	// 	'user_id' => $user_id,
-	// 	'product_id' => $product_id,
-	// ];
-	// if (is_user_logged_in()) {
-	// 	$formdata = $wpdb->insert($table,$data);
-	// 	echo 1;
-	// }else {
-	// 	$redirect = site_url( '/' ) . login;
-	// 	echo $redirect;
-	// }
+	$data = [
+		'body' => $body,
+		'user_id' => $user_id,
+		'product_id' => $product_id,
+		'question_id' => $question_id,
+	];
+	if (is_user_logged_in()) {
+		$formdata = $wpdb->insert($table,$data);
+		echo 1;
+	}else {
+		$redirect = site_url( '/' ) . login;
+		echo $redirect;
+	}
 	die;
 }
