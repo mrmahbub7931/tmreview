@@ -33,10 +33,10 @@ $current_user = wp_get_current_user();
 
 <div class="col-md-3">
     <div class="short-profile">
-        <img src="img/1.jpg" alt="name">
+        <?php echo get_avatar( $current_user->ID )?>
         <div>
-            <span>hello!</span>
-            <h4>md.faizul kabir</h4>
+            <span>Hello!</span>
+            <h4><?php echo $current_user->display_name; ?></h4>
         </div>
     </div>
     <div class="list-group aside" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -55,6 +55,7 @@ $current_user = wp_get_current_user();
         <a href="<?php echo wp_logout_url(home_url()); ?>" class="list-group-item list-group-item-action">log out</a>
     </div>
 </div>
+
 <div class="col-md-9">
     <div class="tab-content right" id="v-pills-tabContent">
 
@@ -126,60 +127,66 @@ $current_user = wp_get_current_user();
             <div class="heading">
                 <h5>my reviews</h5>
             </div>
+            <?php 
+                global $wpdb;
+                $user_review_table = $wpdb->prefix.'product_review';
+                $product_table = $wpdb->prefix.'product';
+                // $user_sql = 'SELECT user_login, display_name from '.$wpdb->prefix.'questions INNER JOIN '.$wpdb->prefix.'users ON '.$wpdb->prefix.'users.ID = '.$wpdb->prefix.'questions.user_id';
+                $user_review_sql = "SELECT * from $user_review_table INNER JOIN $product_table ON $product_table.id = $user_review_table.product_id WHERE user_id=$current_user->ID";
+                $user_reviews = $wpdb->get_results($user_review_sql);
+                if (count($user_reviews) > 0) :
+                    foreach ($user_reviews as $key => $user_review) :
+            ?>
             <div class="review-list">
-                <img src="img/1.jpg" alt="name">
+                <img src="<?php echo $user_review->product_logo;?>" alt="name">
                 <div>
-                    <h6>jordana matte lpstick</h6>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star "></span>
-                    <span>4</span>
-                    <span>(you rated this book)</span>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. necessitatibus est corporis quaerat
-                        ratione debitis voluptate dignissimos!</p>
+                    <h6><?php echo $user_review->name;?></h6>
+                    <ul class="single-review-<?php echo $user_review->star;?> single-review">
+                        <li><i class="fas fa-star"></i></li>
+                        <li><i class="fas fa-star"></i></li>
+                        <li><i class="fas fa-star"></i></li>
+                        <li><i class="fas fa-star"></i></li>
+                        <li><i class="fas fa-star"></i></li>
+                    </ul>
+                    <span><?php echo $user_review->star; ?></span>
+                    <span>(you rated this item)</span>
+                    <p><?php echo $user_review->body; ?></p>
                     <a href="#" class="line">Edit review</a><a href="#">Delete review</a>
                 </div>
 
             </div>
-            <div class="review-list">
-                <img src="img/1.jpg" alt="name">
-                <div>
-                    <h6>jordana matte lpstick</h6>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star "></span>
-                    <span>4</span>
-                    <span>(you rated this book)</span>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. necessitatibus est corporis quaerat
-                        ratione debitis voluptate dignissimos!</p>
-                    <a href="#" class="line">Edit review</a><a href="#">Delete review</a>
-                </div>
-            </div>
+                    <?php endforeach;endif; ?>
         </div>
         <!---MY-REVIEWS-END---->
 
         <!---MY-QUESTION-AND-ANSWER-START---->
         <div class="tab-pane fade myquestion-and-answer" id="v-pills-messages" role="tabpanel"
             aria-labelledby="v-pills-messages-tab">
+            <?php 
+                global $wpdb;
+                $user_table = $wpdb->prefix.'users';
+                $wishlist_table = $wpdb->prefix.'wishlist';
+                $product_table = $wpdb->prefix.'product';
+                // $user_sql = 'SELECT user_login, display_name from '.$wpdb->prefix.'questions INNER JOIN '.$wpdb->prefix.'users ON '.$wpdb->prefix.'users.ID = '.$wpdb->prefix.'questions.user_id';
+                $user_wishlist_product_sql = "SELECT * from $wishlist_table INNER JOIN $product_table ON $product_table.id = $wishlist_table.product_id WHERE user_id=$current_user->ID";
+                $user_wishlist_products = $wpdb->get_results($user_wishlist_product_sql);
+                // print_r($user_wishlist_products);
+            ?>
             <div class="heading">
                 <h5>my questions and answers</h5>
             </div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                        aria-controls="home" aria-selected="true">my questions</a>
+                    <a class="nav-link active" id="question-tab" data-toggle="tab" href="#question" role="tab"
+                        aria-controls="question" aria-selected="true">my questions</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                        aria-controls="profile" aria-selected="false">my answers</a>
+                    <a class="nav-link" id="answer-tab" data-toggle="tab" href="#answer" role="tab"
+                        aria-controls="answer" aria-selected="false">my answers</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active question" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade show active question" id="question" role="tabpanel" aria-labelledby="home-tab">
                     <div class="question-list">
                         <i class="fa fa-comment" aria-hidden="true"></i>
                         <div>
@@ -196,7 +203,7 @@ $current_user = wp_get_current_user();
                     </div>
 
                 </div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">what</div>
+                <div class="tab-pane fade" id="answer" role="tabpanel" aria-labelledby="profile-tab">what</div>
             </div>
         </div>
         <!---MY-QUESTION-AND-ANSWER-END---->
@@ -243,16 +250,30 @@ $current_user = wp_get_current_user();
         <!---MY-WISHLIST-START---->
         <div class="tab-pane fade my-wishlist" id="v-pills-my-wishlist" role="tabpanel"
             aria-labelledby="v-pills-my-wishlist-tab">
+            <?php 
+                global $wpdb;
+                $user_table = $wpdb->prefix.'users';
+                $wishlist_table = $wpdb->prefix.'wishlist';
+                $product_table = $wpdb->prefix.'product';
+                // $user_sql = 'SELECT user_login, display_name from '.$wpdb->prefix.'questions INNER JOIN '.$wpdb->prefix.'users ON '.$wpdb->prefix.'users.ID = '.$wpdb->prefix.'questions.user_id';
+                $user_wishlist_product_sql = "SELECT * from $wishlist_table INNER JOIN $product_table ON $product_table.id = $wishlist_table.product_id WHERE user_id=$current_user->ID";
+                $user_wishlist_products = $wpdb->get_results($user_wishlist_product_sql);
+                // print_r($user_wishlist_products);
+            ?>
             <div class="heading">
-                <h5>my rewards</h5>
-                <span>you have 3 products in your wishlist</span>
+                <h5>my wishlist</h5>
+                <span>you have <?php echo count($user_wishlist_products); ?> products in your wishlist</span>
             </div>
             <div class="row">
+                <?php 
+                    if (count($user_wishlist_products) > 0) :
+                        foreach ($user_wishlist_products as $key => $user_wishlist_product) :
+                ?>
                 <div class="col-md-4">
                     <a href="#" class="single-wishlist">
-                        <img src="img/product.jpg" alt="product" class="img-fluid product-img">
+                        <img src="<?php echo $user_wishlist_product->item_image;?>" alt="product" class="img-fluid product-img">
                         <i class="fa fa-heart-o"></i>
-                        <p>Lorem ipsum dolor sit amet,dipisicing elit.!</p>
+                        <p><?php echo $user_wishlist_product->item_name; ?></p>
                         <span class="fa fa-star checked"></span>
                         <span class="fa fa-star checked"></span>
                         <span class="fa fa-star checked"></span>
@@ -260,32 +281,7 @@ $current_user = wp_get_current_user();
                         <span class="fa fa-star checked"></span>
                     </a>
                 </div>
-
-                <div class="col-md-4">
-                    <a href="#" class="single-wishlist">
-                        <img src="img/product.jpg" alt="product" class="img-fluid product-img">
-                        <i class="fa fa-heart-o"></i>
-                        <p>Lorem ipsum dolor sit amet,dipisicing elit.!</p>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                    </a>
-                </div>
-
-                <div class="col-md-4">
-                    <a href="#" class="single-wishlist">
-                        <img src="img/product.jpg" alt="product" class="img-fluid product-img">
-                        <i class="fa fa-heart-o"></i>
-                        <p>Lorem ipsum dolor sit amet,dipisicing elit.!</p>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                    </a>
-                </div>
+                    <?php endforeach; endif;?>
             </div>
         </div>
         <!---MY-WISHLIST-END---->

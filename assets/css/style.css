@@ -340,30 +340,61 @@ div.review_slide {
     flex-direction: column;
     background: #fff;
     padding: 20px 15px;
-    border: 10px solid #ececec;
-    border-radius: 20px;
     transition: 0.4s ease-in;
+    box-sizing: border-box;
+    margin: 8px;
 }
 
 .single-review-box .thumb-part {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: start;
 }
 .single-review-box .thumb-part ul li i {
-    font-size: 12px;
-    margin: 0 0 0 5px;
-    color: #f69c20;
+    font-size: 0.7rem;
+    margin: 0 0 0 2px;
+    color: #fff;
+    background: #dddada;
+    padding: 6px;
 }
+.single-review li i {
+    font-size: 0.7rem;
+    margin: 0 0 0 2px;
+    color: #fff;
+    background: #dddada;
+    padding: 6px;
+}
+
+ul.single-review {
+    display: flex;
+    align-items: center;
+}
+.single-review-box .thumb-part ul.single-review-5 > li > i,ul.single-review-5 > li > i {
+    background: #00b67a
+}
+.single-review-box .thumb-part ul.single-review-4 > li:nth-child(-n+4) > i,ul.single-review-4 > li:nth-child(-n+4) > i {
+    background: rgb(115, 207, 17);;
+}
+.single-review-box .thumb-part ul.single-review-3 > li:nth-child(-n+3) > i,ul.single-review-3 > li:nth-child(-n+3) > i {
+    background: rgb(255, 195, 28);
+}
+.single-review-box .thumb-part ul.single-review-2 > li:nth-child(-n+2) > i,ul.single-review-2 > li:nth-child(-n+2) > i {
+    background: rgb(230, 103, 43);;
+}
+.single-review-box .thumb-part ul.single-review-1 > li:nth-child(-n+2) > i,ul.single-review-1 > li:nth-child(-n+2) > i {
+    background: #ff3722;
+}
+
 .single-review-box .thumb-part > img {
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     object-fit: cover;
     border-radius: 50%;
 }
 
 .single-review-box .thumb-part ul {
     display: flex;
+    margin-left: 10px;
 }
 .single-review-box .reviewer_details {
     display: flex;
@@ -372,9 +403,9 @@ div.review_slide {
     margin: 10px 0;
     flex-wrap: wrap;
 }
-.single-review-box .reviewer_details h3:last-child {
+/* .single-review-box .reviewer_details h3:last-child {
     margin-left: 5px;
-}
+} */
 .single-review-box .reviewer_details h3 {
     font-size: 14px;
     margin: 0 5px 0 0;
@@ -384,6 +415,7 @@ div.review_slide {
     color: #b7b7b7;
     font-weight: 500;
     font-size: 14px;
+    margin-right: 5px;
 }
 .single-review-box .review_text p {
     font-size: 14px;
@@ -394,72 +426,80 @@ div.review_slide {
 }
 
 /* top products css */
-section.tmxr_top_products .single-product .review ul {
+.single-product .review ul {
     display: flex;
     margin: 10px 0;
 }
 
-section.tmxr_top_products .single-product {
+.single-product {
     border: 1px solid #d2d2d2;
     background: #fff;
     text-align: left;
     position: relative;
+    overflow: hidden;
 }
-section.tmxr_top_products .single-product h3.product-title {
+.single-product h3.product-title {
     font-size: 16px;
     line-height: 1.6;
 }
 
-section.tmxr_top_products .single-product .product-short-desc {
+.single-product .product-short-desc {
     padding: 0 10px;
 }
-section.tmxr_top_products .single-product .add-to-cart-wrapper {
+.single-product .add-to-cart-wrapper {
     padding: 7px 0;
     border-radius: 4px;
     position: relative;
     height: 44px;
     overflow: hidden;
 }
-section.tmxr_top_products .single-product .add-to-cart {
+.single-product .add-to-cart {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     position: absolute;
     bottom: -100%;
-    transition: 0.3s ease-in;
+    transition: 0.4s ease-in-out;
     border-top: 1px solid #d2d2d2;
+    background: #fff;
 }
-section.tmxr_top_products .single-product:hover .add-to-cart {
+.single-product:hover .add-to-cart {
     bottom: 0;
 }
-section.tmxr_top_products .single-product .product-thumb {
+.single-product .add-to-cart > form {
+    width: 30%;
+    text-align: center;
+}
+.single-product .product-thumb {
     position: relative;
     overflow: hidden;
     width: 100%;
     height: 250px;
 }
-section.tmxr_top_products .single-product .product-thumb > a {
+.single-product .product-thumb > a {
     display: block;
     width: 100%;
     height: 100%;
 }
 
-section.tmxr_top_products .single-product .product-thumb > a > img {
+.single-product .product-thumb > a > img {
     object-fit: cover;
     width: 100%;
     height: 100%;
 }
 
-section.tmxr_top_products .single-product .add-to-cart span.wishlist {
+.single-product .add-to-cart .wishlist {
     flex-basis: 25%;
     text-align: center;
+    background: transparent;
+    border: none;
 }
-section.tmxr_top_products .single-product .add-to-cart span.wishlist i {
+.single-product .add-to-cart .wishlist i {
     color: #fc2779;
     font-size: 24px;
 }
-section.tmxr_top_products .single-product .add-to-cart a.add-to-cart-btn {
+.single-product .add-to-cart a.add-to-cart-btn {
     background: #fc2779;
     color: #fff;
     padding: 8px 11px;
@@ -468,19 +508,19 @@ section.tmxr_top_products .single-product .add-to-cart a.add-to-cart-btn {
     flex-basis: 75%;
     text-align: center;
 }
-section.tmxr_top_products .single-product h3.product-title a:hover {
+.single-product h3.product-title a:hover {
     color: #ed64a6;
 }
-section.tmxr_top_products .single-product h3.product-title a {
+.single-product h3.product-title a {
     color: #313131;
     transition: 0.3s ease-in;
 }
-section.tmxr_top_products .single-product .review ul li i {
+.single-product .review ul li i {
     margin: 0 6px 0 0px;
     font-size: 12px;
 }
 
-section.tmxr_top_products .single-product .review {
+.single-product .review {
     padding: 0 10px;
 }
 
@@ -1053,6 +1093,9 @@ div#wrapper-footer-full .footer-widget ul li {
     padding: 0 0 10px;
     position: relative;
 }
+.wrapper.product {
+    margin: 30px 0 30px;
+}
 
 /* ---- end Single product page design */
 .review_primary_btn,.review_secondary_btn{
@@ -1317,10 +1360,12 @@ margin-right: 20px;
  color:red;
     
 }
-.single-wishlist p{
+.single-wishlist p {
     display: block;
     margin: 10px 0;
-    color:#212529;
+    color: #212529;
+    padding: 0 5px;
+    line-height: 1.6rem;
 }
 .single-wishlist .checked {
   color: orange;
@@ -1614,6 +1659,31 @@ margin-right: 20px;
 }
 /* ---- end review page design ---- */
 /* ---- start brand page design --- */
+.single-brand-box {
+    background: #fff;
+    margin: 10px 0;
+    text-align: left;
+}
+
+.single-brand-box .brand_title {
+    text-align: center;
+    padding: 15px 10px 10px;
+    font-size: 1.2rem;
+    color: #000;
+    line-height: 1.2rem;
+}
+
+.single-brand-box .thumb {
+    width: 100%;
+    height: 150px;
+    display: block;
+}
+
+.single-brand-box .thumb img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
 .single-brand-header {
     display: flex;
     align-items: center;

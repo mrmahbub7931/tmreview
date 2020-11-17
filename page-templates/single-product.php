@@ -143,7 +143,8 @@
                         </ul>
                     </div>
                 </div><!-- end review-filter-box -->
-                <?php foreach ($product_reviews as $product_review) :
+                <?php 
+                foreach ($product_reviews as $product_review) :
                     $sql_user = "SELECT * FROM $user_table WHERE ID=$product_review->user_id";
                     $user_form = $wpdb->get_results($sql_user) or "data not found";
                     $review_user = "SELECT count(user_id) as total_review FROM $product_review_table WHERE user_id=$product_review->user_id and status=1";
@@ -429,17 +430,13 @@ var Controller = (function (forms_reply) {
             var qbox = document.querySelectorAll(".single-product-qa div.qa-box-wrap"),
                 qboxarr = [...qbox],
                 read_more_q = document.querySelector('.read_more_q');
-                // read_more_q.addEventListener('click',function (e) {
-                //     e.preventDefault();
-                //     // qboxarr.slice(0,2).show();
-                // });
+   
                 jQuery('.read_more_q').click(function () {
                     jQuery('.single-product-qa div.qa-box-wrap:hidden').slice(0, 4).css("display", "flex");
                     if (jQuery('.single-product-qa div.qa-box-wrap').length == jQuery('.single-product-qa div.qa-box-wrap:visible').length) {
                         jQuery('.read_more_q ').hide();
                     }
                 });
-            // console.log(qboxarr.slice(0,2));
             
         });
 

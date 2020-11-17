@@ -1,4 +1,6 @@
-<?php get_header(); ?>
+<?php get_header(); 
+$current_user = wp_get_current_user();
+?>
 
 <section class="tmxr_welcome_area">
     <div class="banner_bg" style="background-image: url(<?php echo esc_url(get_template_directory_uri())?>/assets/img/banner-01.jpg)">
@@ -26,14 +28,29 @@
             </div>
         </div>
     </div>
+    <!-- <marquee behavior="" direction="left">Hello world</marquee> -->
+    <?php
+        global $wpdb; 
+        $review_table = $wpdb->prefix.'product_review';
+        $reviews_sql = "SELECT * from $review_table";
+
+        $user_sql = 'SELECT * from '.$wpdb->prefix.'product_review INNER JOIN '.$wpdb->prefix.'users ON '.$wpdb->prefix.'users.ID = '.$wpdb->prefix.'product_review.user_id';
+
+        $product_sql = 'SELECT * from '.$wpdb->prefix.'product_review INNER JOIN '.$wpdb->prefix.'product ON '.$wpdb->prefix.'product.id = '.$wpdb->prefix.'product_review.product_id';
+
+        $user_results = $wpdb->get_results($user_sql) or 'Data not found';
+        $product_results = $wpdb->get_results($product_sql) or 'Data not found';
+
+    ?>
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 padd-none">
                 <div class="review_slide">
+                    <?php foreach($user_results as $key => $user_result) : ?>
                     <div class="single-review-box">
                         <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
+                            <?php echo get_avatar($user_result->ID); ?>
+                            <ul class="single-review-<?php echo $user_result->star;?>">
                                 <li><i class="fas fa-star"></i></li>
                                 <li><i class="fas fa-star"></i></li>
                                 <li><i class="fas fa-star"></i></li>
@@ -42,403 +59,20 @@
                             </ul>
                         </div>
                         <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
+                            <a href="<?php echo home_url( '/user/'.$user_result->user_login.'?user_id='.$user_result->ID ); ?>"><h3><?php echo $user_result->display_name; ?></h3></a>
                             <span>reviewed</span>
-                            <h3>Techmix</h3>
+                            <a href="<?php echo home_url( '/'.$product_results[$key]->slug.'?product_id='.$product_results[$key]->id ) ?>"><h3><?php echo $product_results[$key]->name; ?></h3></a>
                         </div>
                         <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up. We called that day and after waiting in a cue of 100 calls ahead of us</p>
+                            <p><?php echo $user_result->body; ?></p>
                         </div>
                     </div>
-                       
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up. We called that day and after waiting in a cue of 100 calls ahead of us</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up. We called that day and after waiting in a cue of 100 calls ahead of us</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up. We called that day and after waiting in a cue of 100 calls ahead of us.We called that day and after waiting in a cue of 100 calls ahead of us</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up. We called that day and after waiting in a cue of 100 calls ahead of us</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.We bought an LG Microwave which</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="single-review-box">
-                        <div class="thumb-part">
-                            <img src="<?php echo get_template_directory_uri()?>/assets/img/mahbub.jpg" alt="">
-                            <ul>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                                <li><i class="fas fa-star"></i></li>
-                            </ul>
-                        </div>
-                        <div class="reviewer_details">
-                            <h3>Mahbubar Rahman</h3>
-                            <span>reviewed</span>
-                            <h3>Techmix</h3>
-                        </div>
-                        <div class="review_text">
-                            <p>We bought an LG Microwave which died on us two weeks before the 1 year warranty was up.</p>
-                        </div>
-                    </div>
-
-
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
     </div>
+
 </section>
 <?php
         global $wpdb;
@@ -453,7 +87,7 @@
             <div class="col-12 padd-none">
                 <div class="section-heading both tmxr_flex">
                     <h3>Top Brands</h3>
-                    <a href="#">See All Brands <i class="fas fa-angle-right"></i></a>
+                    <a href="<?php echo get_permalink( get_page_by_path( 'brand' ) )?>">See All Brands <i class="fas fa-angle-right"></i></a>
                 </div>
             </div>
         </div>
@@ -488,7 +122,7 @@
             <div class="col-12 padd-none">
                 <div class="section-heading both tmxr_flex">
                     <h3>Top Stores</h3>
-                    <a href="#">See All Stores <i class="fas fa-angle-right"></i></a>
+                    <a href="<?php echo get_permalink( get_page_by_path( 'store' ) )?>">See All Stores <i class="fas fa-angle-right"></i></a>
                 </div>
             </div>
         </div>
@@ -515,7 +149,7 @@
             <div class="col-12 padd-none">
                 <div class="section-heading both tmxr_flex">
                     <h3>Top Products</h3>
-                    <a href="#">See All Products <i class="fas fa-angle-right"></i></a>
+                    <a href="<?php echo get_permalink( get_page_by_path( 'product' ) )?>">See All Products <i class="fas fa-angle-right"></i></a>
                 </div>
             </div>
         </div>
@@ -530,7 +164,12 @@
             if(count($products) > 0) : 
             ?>
         <div class="row">
-        <?php foreach ($products as $product) :?>
+        <?php 
+        $wishlist_table = $wpdb->prefix.'wishlist';
+        $wishlist_sql = "SELECT * from $wishlist_table";
+        $wishlist_results = $wpdb->get_results($wishlist_sql) or '';
+        // var_dump($wishlist_result[0]->user_id.' '.$current_user->ID);
+        foreach ($products as $key => $product) :?>
             <div class="col-12 col-md-3 mb-4">
                 <div class="single-product">
                     <div class="product-thumb">
@@ -549,11 +188,15 @@
                             <li><i class="fas fa-star"></i></li>
                         </ul>
                     </div>
-                    <div class="add-to-cart-wrapper">
-                        <div class="add-to-cart">
-                            <span class="wishlist"><a href="#"><i class="far fa-heart"></i></a></span>
-                            <a class="add-to-cart-btn" href="<?php echo home_url( '/'.$product->slug.'?product_id='.$product->id ) ?>">View Review</a>
-                        </div>
+                    <div class="add-to-cart">
+                        <form action="#" method="post" id="wishlist-form" data-url="<?php echo admin_url('admin-ajax.php');?>">
+                            <input type="hidden" name="item_name" id="item_name" value="<?php echo $product->name?>" >
+                            <input type="hidden" name="item_image" id="item_image" value="<?php echo $product->product_logo ?>" >
+                            <input type="hidden" name="user_id" id="user_id" value="<?php echo $current_user->ID ?>" >
+                            <input type="hidden" name="product_id" id="product_id" value="<?php echo $product->id ?>" >
+                            <button type="submit" class="wishlist"><i class="far fa-heart"></i></button>
+                        </form>
+                        <a class="add-to-cart-btn" href="<?php echo home_url( '/'.$product->slug.'?product_id='.$product->id ) ?>">View Review</a>
                     </div>
                 </div>
                 

@@ -247,46 +247,123 @@ var questionCreate = (function ($) {
                }); 
             });
         },
-        // replyQCreatefn: function () {
-        //     var reply_question_form = $('#reply_question_form');
-        //     reply_question_form.on("submit",function (e) {
-        //        e.preventDefault(); 
-        //     //    var ajaxurl = reply_question_form.data('url'),
-        //     //     question_id = $("#question_id").val(),
-        //     //     user_id = $("#user_id").val(),
-        //     //     product_id = $("#product_id").val(),
-        //     //     body = $("#body").val();
-        //     //     console.log(question_id + ' '+ body);
-        //         // $.ajax({
-        //         //     type: 'post',
-
-        //         //     url: ajaxurl,
-        //         //     data: {
-        //         //         action: "make_reply_fn",
-        //         //         user_id: question_id,
-        //         //         user_id: user_id,
-        //         //         product_id: product_id,
-        //         //         body: body
-        //         //     },
-        //         //     success: function (response) {
-        //         //         console.log(response);
-        //         //         // if (response === "1") {
-        //         //         //     question_form[0].reset();
-        //         //         // }else{
-        //         //         //     window.location.href = response;
-        //         //         // }
-        //         //     }
-        //         // });
-        //     });
-        // },
         init: function () {
             this.questionCreatefn();
-            // this.replyQCreatefn();
         }
     }
-})(jQuery)
+})(jQuery);
+
+var wishlistfn = (function () {
+    return {
+        wishlistCreate: function (e) {
+            e.preventDefault();
+            currentForm = e.currentTarget;
+            var item_name = currentForm.querySelector('#item_name').value,
+                item_image = currentForm.querySelector('#item_image').value,
+                user_id = currentForm.querySelector('#user_id').value,
+                product_id = currentForm.querySelector('#product_id').value,
+                form_submit = currentForm.querySelector('button'),
+                wishlist_icon = currentForm.querySelector('.far.fa-heart'),
+                ajaxurl = currentForm.dataset.url;
+
+                if (!wishlist_icon.classList.contains('fas fa-check')) {
+                    jQuery.ajax({
+                        url: ajaxurl,
+                        type: 'post',
+                        data: {
+                            action: "wishlist_ajax",
+                            item_name: item_name,
+                            item_image: item_image,
+                            user_id: user_id,
+                            product_id: product_id
+                        },
+                        success: function(response){
+                            console.log(response);
+                            wishlist_icon.classList.add('fas','fa-check');
+                            form_submit.setAttribute("disabled", "");
+                            if (response !== "1") {
+                                window.location.href = response;
+                            }else{
+                                wishlist_icon.classList.add('fas','fa-check');
+                            }
+                        }
+                    });
+                }
+                
+                // if(wishlist_icon.classList.contains('fas fa-check')){
+                //     wishlist_icon.classList.remove('fas','fa-check');
+                // }
+        }
+    }
+    
+    // wishlistfn: function () {
+//     var wishlist_form = $('#wishlist-form'),
+//         wishlist_btn = $('span.wishlist');
+//         wishlist_btn.on("click",function (e) {
+//            e.preventDefault();
+//            var item_name = wishlist_form.find('#item_name').val(),
+//                 item_image = wishlist_form.find('#item_image').val(),
+//                 user_id = wishlist_form.find('#user_id').val(),
+//                 product_id = wishlist_form.find('#product_id').val(),
+//                 ajaxurl = wishlist_form.data('url');
+//                 // console.log(wishlist_form.html());
+//                 // if (!wishlist_btn.find('.far.fa-heart').hasClass('fas fa-check')) {
+//                 //     jQuery.ajax({
+//                 //         url: ajaxurl,
+//                 //         type: 'post',
+//                 //         data: {
+//                 //             action: "wishlist_ajax",
+//                 //             item_name: item_name,
+//                 //             item_image: item_image,
+//                 //             user_id: user_id,
+//                 //             product_id: product_id
+//                 //         },
+//                 //         success: function(response){
+//                 //             console.log(response);
+//                 //             // if (response !== "1") {
+//                 //             //     window.location.href = response;
+//                 //             // }else{
+//                 //             //     wishlist_btn.find('.far.fa-heart').addClass('fas fa-check');
+//                 //             // }
+//                 //         }
+//                 //     });
+//                 // }else{
+//                 //     wishlist_btn.find('.far.fa-heart').removeClass('fas fa-check');
+//                 // }
+//         });
+// }
+})();
+
+var wishlistController = (function (wishlist) {
+    var NodeListLoop = function (list,callback) {
+        for(let i = 0; i<list.length; i++) {
+            callback(list[i],i);
+        }
+    }
+    var setupEvenetListerner = function () {
+        
+        window.addEventListener("load",() => {
+            var wishlist_form = document.querySelectorAll("#wishlist-form");
+            if (wishlist_form) {
+                NodeListLoop(wishlist_form,function (cur) {
+                    cur.addEventListener("submit",wishlist.wishlistCreate);
+                });
+            }
+            
+        });
+
+    };
+    return {
+        init: function () {
+            setupEvenetListerner();
+        }
+    }
+})(wishlistfn);
+
+
 
 userCreate.init();
 productReviewCreate.init();
 productCreate.init();
 questionCreate.init();
+wishlistController.init();

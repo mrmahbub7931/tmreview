@@ -316,6 +316,36 @@ if (!function_exists('tm_review_question_reply_db')) {
     }
 }
 
+// wishlist table
+if (!function_exists('tm_review_wishlist_db')) {
+    add_action( 'after_setup_theme', 'tm_review_wishlist_db' );
+    function tm_review_wishlist_db() {
+
+        global $wpdb;
+        $charset_collate = $wpdb->get_charset_collate();
+        $table = $wpdb->prefix . 'wishlist';
+        $user_table = $wpdb->prefix . 'users';
+        $product_table = $wpdb->prefix . 'product';
+    
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            id mediumint(11) NOT NULL AUTO_INCREMENT,
+            item_name varchar(255) NOT NULL,
+            item_review varchar(255) NULL,
+            item_image varchar(255) NULL,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            product_id mediumint(11) NOT NULL,
+            time datetime DEFAULT CURRENT_TIMESTAMP NULL,
+            FOREIGN KEY (user_id) REFERENCES $user_table(id),
+            FOREIGN KEY (product_id) REFERENCES $product_table(id),
+            PRIMARY KEY (id),
+            UNIQUE KEY wishlistItem (user_id,product_id)
+        ) $charset_collate;";
+    
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+    }
+}
+
 // retrieves the attachment ID from the file URL
 function tm_review_get_image_id($image_url) {
     global $wpdb;

@@ -59,6 +59,10 @@ add_action('wp_ajax_nopriv_make_question_fn', 'tm_review_make_question_fn_callba
 add_action('wp_ajax_make_reply_fn', 'tm_review_make_reply_fn_callback');
 add_action('wp_ajax_nopriv_make_reply_fn', 'tm_review_make_reply_fn_callback');
 
+// Question reply ajax
+add_action('wp_ajax_wishlist_ajax', 'tm_review_wishlist_ajax_callback');
+add_action('wp_ajax_nopriv_wishlist_ajax', 'tm_review_wishlist_ajax_callback');
+
 
 // store update callback function
 function tm_review_store_form_ajax_update_callback()
@@ -440,6 +444,7 @@ function tm_review_make_question_fn_callback()
 	}
 	die;
 }
+// question reply
 function tm_review_make_reply_fn_callback()
 {
 	global $wpdb;
@@ -460,6 +465,43 @@ function tm_review_make_reply_fn_callback()
 		$formdata = $wpdb->insert($table,$data);
 		echo 1;
 	}else {
+		$redirect = site_url( '/' ) . login;
+		echo $redirect;
+	}
+	die;
+}
+// wishlit
+function tm_review_wishlist_ajax_callback()
+{
+	global $wpdb;
+
+	$item_name = wp_strip_all_tags($_POST['item_name']);
+	$item_image = wp_strip_all_tags($_POST['item_image']);
+	$user_id = wp_strip_all_tags($_POST['user_id']);
+	$product_id = wp_strip_all_tags($_POST['product_id']);
+
+	$table = $wpdb->prefix.'wishlist';
+	$currentUserId = wp_get_current_user()->ID;
+	$sql = "SELECT * from $table where user_id=$currentUserId and product_id=$product_id";
+	$user_reviews = $wpdb->get_results($sql);
+
+	
+
+	$data = [
+		'item_name' => $item_name,
+		'item_image' => $item_image,
+		'user_id' => $user_id,
+		'product_id' => $product_id,
+	];
+	
+	// print_r($data);
+	if (is_user_logged_in()){
+
+		if (count($user_reviews) <= 0) {
+			$formdata = $wpdb->insert($table,$data);
+		}
+		echo 1;
+	}else{
 		$redirect = site_url( '/' ) . login;
 		echo $redirect;
 	}

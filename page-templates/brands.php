@@ -18,7 +18,7 @@
         if (isset($_REQUEST['brand_edit'])) :
                 $brandID = sanitize_key( $_GET['id'] );
                 $sql = "SELECT * FROM $table WHERE id=$brandID";
-                $single_form = $wpdb->get_results($sql) or die("data not found");     
+                $single_form = $wpdb->get_results($sql) or die("data not found");  
     ?>
     <div id="col-container" class="wp-clearfix">
         <div id="col-left">
@@ -30,7 +30,7 @@
                         <input type="hidden" name="form-id" id="form-id" value="<?php echo $single_form[0]->id; ?>">
                         <div class="form-field form-required term-name-wrap">
                             <label for="p-brand-name">Name</label>
-                            <input type="text" id="p-brand-name" name="name" class="p-brand-name" size="40" aria-required="true" value="<?php echo $single_form[0]->name; ?>">
+                            <input type="text" id="p-brand-name" name="name" class="p-brand-name" size="40" aria-required="true" value="<?php echo $single_form[0]->brand_name; ?>">
                             <p>The name is how it appears on your site.</p>
                         </div>
                         

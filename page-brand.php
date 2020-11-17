@@ -20,11 +20,18 @@ $container = get_theme_mod( 'techmix_review_container_type' );
 ?>
 
 <div class="wrapper brand" id="page-wrapper">
+<?php 
+    global $wpdb;
+    $brand_table = $wpdb->prefix.'brand';
+    $brand_sql = "SELECT * FROM $brand_table";
+    $brand_resutls = $wpdb->get_results($brand_sql) or "Data not found";
+    // print_r($brand_resutls);
 
+?>
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-9">
-                <div class="single-brand-header">
+                <!-- <div class="single-brand-header">
                     <div class="brand-thumb">
                         <img src="http://lorempixel.com/80/80/" alt="">
                     </div>
@@ -54,7 +61,21 @@ $container = get_theme_mod( 'techmix_review_container_type' );
                             <a href="#" class="visit_website_btn">Visit Website</a>
                         </div>
                     </div>
+                </div> -->
+                <?php if (count($brand_resutls) > 0) : ?>
+                <div class="row">
+                    <?php foreach($brand_resutls as $key => $brand) : ?>
+                    <div class="col-12 col-lg-3">
+                        <div class="single-brand-box">
+                            <div class="thumb">
+                                <img src="<?php echo $brand->brand_logo?>" alt="">
+                            </div>
+                            <h3 class="brand_title"><?php echo $brand->brand_name; ?></h3>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
                 </div>
+                <?php endif; ?>
             </div>
             <div class="col-12 col-lg-3">
                 
